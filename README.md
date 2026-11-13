@@ -48,7 +48,7 @@ npm run test:console
 
 The integration check runs a whole synthetic session through `/relay` on the local server and its local database. It covers publishing, joining, saving, submitting, collecting, adding and removing participants, closing and deleting, and the hourly purge. It also checks the security headers, and it refuses to run against anything but your own computer. The browser checks drive the participant page and the researcher console in headless Chrome.
 
-mPile is built with React, TypeScript, Vinext/Vite, and Cloudflare D1 (SQLite). The application code is in `app/components`, `app/lib`, and `app/app`. The Worker entry, `app/worker/index.ts`, serves the MalverdeSoftware relay at `/relay`. The relay's D1 database only holds data that was sealed in browsers. The shared packages are vendored in `app/vendor/malverdesoftware`, and the Sites build support is vendored with its upstream license.
+mPile is built with React, TypeScript, Vinext/Vite, and Cloudflare D1 (SQLite). The application code is in `app/components`, `app/lib`, and `app/app`. The Worker entry, `app/worker/index.ts`, serves the MalverdeSoftware relay at `/relay`. The relay's D1 database only holds data that was sealed in browsers. The shared packages come from npm as `@malverdesoftware/*`, pinned exactly, and the Sites build support is vendored with its upstream license.
 
 ## Scope and limits
 

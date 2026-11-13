@@ -30,7 +30,7 @@ Items that need attribution or a note:
 - **combokeys**: Apache-2.0 (the package metadata writes it as "Apache 2.0").
 - **scrollbar-width**: its npm metadata has no license field. Its GitHub repository (olmokramer/scrollbar-width.js) carries the MIT license, copyright 2014 Olmo Kramer.
 - **Sites Vite plugin** (vendored): MIT, copyright 2026 OpenAI. The license is preserved in `app/build/sites-vite-plugin.LICENSE`.
-- **`@malverdesoftware/relay`, `@malverdesoftware/sealed-envelope`, `@malverdesoftware/session-client`, `@malverdesoftware/ui`**: this project's own shared packages, vendored in `app/vendor/malverdesoftware/`. They are licensed under Apache-2.0, copyright The Johns Hopkins University. The vendored ui 0.1.1 tarball carries its LICENSE and NOTICE; the other three tarballs predate that and are replaced by registry versions at the first npm release.
+- **`@malverdesoftware/relay`, `@malverdesoftware/sealed-envelope`, `@malverdesoftware/session-client`, `@malverdesoftware/ui`**: this project's own shared packages, installed from npm (relay 0.1.1, sealed-envelope 0.1.2, session-client 0.1.3, ui 0.1.1). They are licensed under Apache-2.0, copyright The Johns Hopkins University, and each carries its LICENSE and NOTICE.
 
 ## Review before release
 
