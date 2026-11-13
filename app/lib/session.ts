@@ -108,13 +108,16 @@ function check(schema: typeof bodySchema, definition: SortDefinition, value: unk
   return parsed.data;
 }
 
+// Shown for a response whose participant is missing from this copy of the key file.
+export const UNKNOWN_LABEL = "(not in this key file)";
+
 export type Collected = { label: string | null; kind: "SUBMITTED" | "DRAFT"; body: unknown; updatedAt: string };
 
 export function toResponses(definition: SortDefinition, collected: Collected[]) {
   const responses: StudyResponse[] = [];
   const problems: { label: string; reason: string }[] = [];
   for (const item of collected) {
-    const label = item.label ?? "(not in this key file)";
+    const label = item.label ?? UNKNOWN_LABEL;
     try {
       responses.push({
         id: label,

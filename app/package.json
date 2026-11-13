@@ -20,7 +20,7 @@
     "creation-key": "node scripts/creation-key.mjs",
     "check:environment": "node ../scripts/check-environment.mjs",
     "check:ui": "malverdesoftware-ui-check .",
-    "verify": "npm run check:environment && npm run check:ui && npm test && npm run typecheck && npm run build && npm run check:build && node ../scripts/build-manifest.mjs",
+    "verify": "npm run check:environment && npm run check:ui && npm run lint && npm test && npm run typecheck && npm run build && npm run check:build && node ../scripts/build-manifest.mjs",
     "demo": "node scripts/demo-local.mjs",
     "console": "node scripts/console-local.mjs",
     "test:browser": "node tests/browser-smoke.mjs",

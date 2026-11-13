@@ -11,7 +11,7 @@ npm ci
 npm run verify
 ```
 
-`verify` checks your Node version, runs the tests and the TypeScript check, builds the app, and writes a checksum list of the build files to `.phase0/build-manifest.json`. That list describes your local build. It doesn't mean anything has been deployed. The GitHub workflow runs the same steps on every pull request.
+`verify` checks your Node version, runs the linter, the tests and the TypeScript check, builds the app, and writes a checksum list of the build files to `.phase0/build-manifest.json`. That list describes your local build. It doesn't mean anything has been deployed. The GitHub workflow runs the same steps on every pull request.
 
 ## Try the app on your computer
 

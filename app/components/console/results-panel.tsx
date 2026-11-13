@@ -9,8 +9,6 @@ import { download } from "@/lib/client";
 import { exportFiles, type Collection } from "@/lib/console";
 import { toStudy } from "@/lib/session";
 
-const LABELS = ["Submitted sorts (CSV)", "Pairwise similarity (CSV)", "Not submitted: drafts (CSV)", "Archive of everything collected (JSON)"];
-
 export default function ResultsPanel({
   title,
   collection,
@@ -67,9 +65,9 @@ export default function ResultsPanel({
           )}
           <p className="secondary-text">Collected {new Date(collection.collectedAt).toLocaleString()}.</p>
           <div className="export-grid">
-            {files.map((f, i) => (
+            {files.map((f) => (
               <Button key={f.name} onClick={() => download(f.name, f.text, f.type)}>
-                {withIcon(downloadIcon, LABELS[i])}
+                {withIcon(downloadIcon, f.label)}
               </Button>
             ))}
           </div>
