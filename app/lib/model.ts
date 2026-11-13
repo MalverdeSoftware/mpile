@@ -1,5 +1,6 @@
 import { z } from "zod";
 export const MAX_CARDS = 100;
+export const MAX_PILES = 50;
 export const cardSchema = z.object({
   id: z.string().min(1).max(80),
   text: z.string().trim().min(1).max(300),
@@ -16,21 +17,22 @@ export const configSchema = z.object({
   maxNewCards: z.number().int().min(1).max(100),
 });
 export type Config = z.infer<typeof configSchema>;
+const pileSchema = z.object({
+  id: z.string().min(1).max(80),
+  name: z.string().trim().min(1).max(120),
+  description: z.string().max(1000),
+});
 export const bodySchema = z.object({
   generated: z.array(cardSchema).max(MAX_CARDS),
-  piles: z
-    .array(
-      z.object({
-        id: z.string().min(1).max(80),
-        name: z.string().trim().min(1).max(120),
-        description: z.string().max(1000),
-      }),
-    )
-    .max(50),
+  piles: z.array(pileSchema).max(MAX_PILES),
   assignments: z.record(z.string().max(80), z.string().max(80).nullable()),
   notes: z.string().max(4000),
 });
 export type ResponseBody = z.infer<typeof bodySchema>;
+// Work in progress: the board lets a pile's name be empty while the participant is still sorting.
+export const draftSchema = bodySchema.extend({
+  piles: z.array(pileSchema.extend({ name: z.string().max(120) })).max(MAX_PILES),
+});
 export type Study = {
   id: string;
   title: string;

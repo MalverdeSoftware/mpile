@@ -52,6 +52,7 @@ export default function SortWorkspace({ session, definition, initial, seed, onSu
     setBusy(true);
     setError("");
     try {
+      if (body.piles.some((p) => !p.name.trim())) throw new Error("Give every pile a name before submitting.");
       checkResponse(definition, body);
       await session.submit(body);
       onSubmitted(body);

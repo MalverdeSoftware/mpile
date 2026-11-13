@@ -12,7 +12,7 @@ import Panel from "@jetbrains/ring-ui-built/components/panel/panel";
 import { Directions } from "@jetbrains/ring-ui-built/components/popup/popup.consts";
 import Select from "@jetbrains/ring-ui-built/components/select/select";
 import Text from "@jetbrains/ring-ui-built/components/text/text";
-import type { Card, ResponseBody } from "@/lib/model";
+import { MAX_PILES, type Card, type ResponseBody } from "@/lib/model";
 import PileZone from "./pile-zone";
 
 export type Update = (change: (body: ResponseBody) => ResponseBody) => void;
@@ -24,7 +24,6 @@ export type BoardView = "unsorted" | "piles";
 
 const UNSORTED = "unsorted";
 const NEW_PILE = "new-pile";
-const MAX_PILES = 50;
 
 export function SortCard({ card, body, disabled, onMove, onNewPile }: {
   card: Card;
