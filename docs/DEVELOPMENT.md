@@ -22,3 +22,5 @@ npm run demo
 ```
 
 This starts a local app backed by a local D1 database on port 5173, using `.wrangler/phase0-state`. It keeps its data apart from any existing `.wrangler/state`, so it never touches your other local data.
+
+The app's design spec, with the decisions behind round 1, is [docs/specs/SPEC-mpile-app.md](specs/SPEC-mpile-app.md).
