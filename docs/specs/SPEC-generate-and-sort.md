@@ -1,6 +1,6 @@
 # Spec: generate and sort
 
-Module id `mpile-generate-sort` · November 13, 2026 · **Status: draft. The author asked for the draft and the build on November 13; the decisions at the end are still theirs to confirm.** Builds on [SPEC-mpile-app](SPEC-mpile-app.md), which listed porting `generate_sort` under "ask first".
+Module id `mpile-generate-sort` · November 13, 2026 · **Status: approved by the author on November 13, with the decisions recorded at the end.** Builds on [SPEC-mpile-app](SPEC-mpile-app.md), which listed porting `generate_sort` under "ask first".
 
 ## Objective
 
@@ -72,7 +72,7 @@ The collect-stage leftovers: the `collect` response kind, the `sources` field on
 - [ ] The membership export lists added cards with `card_origin` `participant`; pairwise output is the same as for the shared cards alone.
 - [ ] Older site code refuses a v2 session.
 
-## Decisions for the author
+## Decisions (November 13)
 
 1. **Limit of 30 added cards, default 5.** Enough for a free list; keeps one response well inside the sealed size limit.
 2. **Shared cards are still required** (at least one). An activity made only of participants' own cards is left out for now.
