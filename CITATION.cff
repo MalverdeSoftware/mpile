@@ -14,6 +14,8 @@ authors:
   - family-names: "Ledesma"
     given-names: "Marissa"
 version: "0.1.0"
+doi: 10.5281/zenodo.24184668
+date-released: "2026-11-13"
 license: Apache-2.0
 repository-code: "https://github.com/MalverdeSoftware/mpile"
 url: "https://mpile.app"
