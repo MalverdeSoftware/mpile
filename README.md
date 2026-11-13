@@ -13,7 +13,7 @@ mPile is a card-sorting tool for research and community activities. Each partici
 - **Only the researcher can read the responses.** The researcher keeps the session's key file, which is the only way to open them. The console opens the sealed responses on the researcher's computer, shows progress, and adds or removes participants.
 - **Results come out as data.** The console exports submitted sorts, pairwise similarity, and drafts as CSV, plus a full JSON archive. It also shows a co-sorting matrix, a connection map, and average-linkage clustering.
 
-The app doesn't require participant accounts. A hosting provider may have its own sign-in rules. The first hosted review instance is private until its owner opens it to public participants.
+The app doesn't require participant accounts.
 
 ## Start locally
 
@@ -48,7 +48,7 @@ npm run test:console
 
 The integration check runs a whole synthetic session through `/relay` on the local server and its local database. It covers publishing, joining, saving, submitting, collecting, adding and removing participants, closing and deleting, and the hourly purge. It also checks the security headers, and it refuses to run against anything but your own computer. The browser checks drive the participant page and the researcher console in headless Chrome.
 
-mPile is built with React, TypeScript, Vinext/Vite, and Cloudflare D1 (SQLite). The application code is in `app/components`, `app/lib`, and `app/app`. The Worker entry, `app/worker/index.ts`, serves the MalverdeSoftware relay at `/relay`. The relay's D1 database only holds data that was sealed in browsers. The shared packages come from npm as `@malverdesoftware/*`, pinned exactly, and the Sites build support is vendored with its upstream license.
+mPile is built with React, TypeScript, Vinext/Vite, and Cloudflare D1 (SQLite). The application code is in `app/components`, `app/lib`, and `app/app`. The Worker entry, `app/worker/index.ts`, serves the MalverdeSoftware relay at `/relay`. The relay's D1 database only holds data that was sealed in browsers. The shared packages come from npm as `@malverdesoftware/*`, pinned exactly.
 
 ## Scope and limits
 

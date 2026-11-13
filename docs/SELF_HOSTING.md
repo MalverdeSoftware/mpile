@@ -81,6 +81,3 @@ Pull reviewed changes, run `npm ci` and `npm run verify`, then deploy again with
 - **Not included.** Accounts, CAPTCHA, and verified one-person-one-response. Each link and passcode is personal; whoever has both can open that participant's sort.
 - **Your obligations.** Communities and their university partners govern the data and decide how the app is operated and who receives links. Review hosting with them before collecting real responses.
 
-## Sites deployment
-
-`.openai/hosting.json` and the vendored Sites build plugin are kept from release 0.1. They identify the original hosted review instance, which still runs release 0.1 with synthetic placeholder data, and do not grant access to it. The round 1 deployment above does not use them.
