@@ -47,8 +47,6 @@ next-env.d.ts
 *.tsbuildinfo
 /wrangler.selfhost.json
 
-# MalverdeSoftware packages are vendored as exact tarballs (see vendor/malverdesoftware/README.md).
-!/vendor/malverdesoftware/*.tgz
 # Local Worker secrets (creation-key hashes for development).
 .dev.vars*
 # Session key files can open every response in a session. Never commit them.

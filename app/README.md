@@ -8,7 +8,7 @@ npm run console   # researcher console and participant page at http://localhost:
 npm run dev       # the same without the console: the public landing page at /
 ```
 
-Application source is in `app/`, `components/`, and `lib/`. The Worker entry, with the relay at `/relay`, is `worker/index.ts`. Vendored MalverdeSoftware packages are in `vendor/malverdesoftware/`. Tests are in `tests/`.
+Application source is in `app/`, `components/`, and `lib/`. The Worker entry, with the relay at `/relay`, is `worker/index.ts`. The shared MalverdeSoftware packages come from npm (`@malverdesoftware/*`), pinned exactly. Tests are in `tests/`.
 
 ## Interface
 
