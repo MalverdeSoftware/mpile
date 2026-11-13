@@ -25,7 +25,8 @@ const PAGE_HEADERS = {
   "Content-Security-Policy": [
     "default-src 'self'",
     // Vinext's hydration delivers the page's React Server Components payload in inline <script> tags.
-    "script-src 'self' 'unsafe-inline'",
+    // React's development build also needs eval for its debugging features; the built site never allows it.
+    `script-src 'self' 'unsafe-inline'${import.meta.env.DEV ? " 'unsafe-eval'" : ""}`,
     // React style attributes (the analysis view's matrix shading and pile colors).
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data:",

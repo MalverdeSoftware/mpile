@@ -11,6 +11,9 @@ const NOT_LOADED = {
   "http://vinext.local": "Vinext's placeholder base for parsing paths",
   "https://vinext.local": "Vinext's placeholder base for parsing paths",
   "http://localhost": "Vinext's placeholder base for parsing paths",
+  "http://n": "Vinext's placeholder base for parsing paths",
+  "https://json-schema.org": "JSON Schema version names in Zod's schema converter, which the app never calls",
+  "http://json-schema.org": "JSON Schema version names in Zod's schema converter, which the app never calls",
   "https://react.dev": "documentation links in React's error messages",
   "https://nextjs.org": "a documentation link in a framework message",
   "https://github.com": "the header and landing links to the MalverdeSoftware page",
@@ -29,9 +32,11 @@ const unexpected = [...found].filter(([origin]) => !(origin in NOT_LOADED));
 assert.deepEqual(unexpected, [], "the built client mentions origins that are not known references");
 
 const server = text("dist/server");
-const worker = server.find(([file]) => file.endsWith(join("server", "index.js")))?.[1] ?? "";
+// The Worker entry imports the code in worker/index.ts from a chunk whose name changes with each build.
+const worker = server.find(([file, content]) => file.endsWith(".js") && content.includes("Content-Security-Policy") && content.includes("connect-src"))?.[1] ?? "";
 assert.ok(worker.includes("frame-ancestors 'none'"), "the Worker sets the page security headers");
 assert.ok(!/connect-src 'self' (https?:|http:)/.test(worker) && !worker.includes("http://127.0.0.1:*"), "deployed pages connect to this site only");
+assert.ok(!worker.includes("unsafe-eval"), "deployed pages never allow eval");
 for (const [file, content] of [...client, ...server])
   assert.ok(!content.includes("Run a sealed pile sort"), `the researcher console is left out of the deployed build (${file})`);
 

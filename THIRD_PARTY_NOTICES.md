@@ -10,10 +10,10 @@ The app bundles these packages into the participant pages and the Cloudflare Wor
 
 | Package | Version | License | Copyright |
 |---|---|---|---|
-| React, React DOM (`react`, `react-dom`) | 19.2.6 | MIT | Meta Platforms, Inc. and affiliates |
-| Next.js (`next`) | 16.3.4 | MIT | 2025 Vercel, Inc. |
-| Vinext (`vinext`), which builds the app's Next.js routes with Vite for Cloudflare Workers; its runtime code is bundled although npm lists it as a development dependency | 1.0.0-beta.5 | MIT | 2026 Cloudflare, Inc. |
-| Zod (`zod`) | 3.25.76 | MIT | 2025 Colin McDonnell |
+| React, React DOM (`react`, `react-dom`) | 19.3.1 | MIT | Meta Platforms, Inc. and affiliates |
+| Next.js (`next`) | 16.4.6 | MIT | 2025 Vercel, Inc. |
+| Vinext (`vinext`), which builds the app's Next.js routes with Vite for Cloudflare Workers; its runtime code is bundled although npm lists it as a development dependency | 1.4.5 | MIT | 2026 Cloudflare, Inc. |
+| Zod (`zod`) | 4.6.7 | MIT | 2025 Colin McDonnell |
 | JetBrains Ring UI (`@jetbrains/ring-ui-built`) | 7.0.133 | Apache-2.0 | 2000–2016 JetBrains s.r.o. |
 | JetBrains Icons (`@jetbrains/icons`) | 5.24.0 | Apache-2.0 | 2010–2017 JetBrains s.r.o. |
 | Mona Sans (`@fontsource-variable/mona-sans`) | 5.3.0 | SIL Open Font License 1.1 | 2022 The Mona Sans Project Authors, with Reserved Font Name "Mona" |
@@ -21,13 +21,13 @@ The app bundles these packages into the participant pages and the Cloudflare Wor
 
 - **Mona Sans** is served to browsers as web font files under the [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/). The font is not modified.
 
-All 101 runtime packages in the lockfile, including those the packages above depend on:
+All 99 runtime packages in the lockfile, including those the packages above depend on:
 
 | License | Packages |
 |---|---|
-| MIT | 55 |
+| MIT | 54 |
 | Apache-2.0 | 23 |
-| LGPL-3.0-or-later, alone or with Apache-2.0 or MIT | 15 |
+| LGPL-3.0-or-later, alone or with Apache-2.0 or MIT | 14 |
 | BSD-3-Clause | 2 |
 | ISC | 2 |
 | OFL-1.1 | 1 |
@@ -41,7 +41,7 @@ All 101 runtime packages in the lockfile, including those the packages above dep
 
 ## Build and test tools (not in the live site)
 
-527 development packages run only when building and testing, apart from Vinext's runtime code (listed above): MIT 445, Apache-2.0 26, ISC 17, MPL-2.0 16, BSD-2-Clause 11, MIT OR Apache-2.0 4, BSD-3-Clause 4, CC0-1.0 2, BlueOak-1.0.0 1, and Python-2.0 1. The MPL-2.0 packages (for example `lightningcss`, `satori`, `@resvg/resvg-wasm`, `@vercel/og` and `axe-core`) are build and test tools; MPL-2.0 applies at the file level.
+543 development packages run only when building and testing, apart from Vinext's runtime code (listed above): MIT 454, Apache-2.0 32, ISC 17, MPL-2.0 16, BSD-2-Clause 11, MIT OR Apache-2.0 5, BSD-3-Clause 4, CC0-1.0 2, BlueOak-1.0.0 1, and Python-2.0 1. The MPL-2.0 packages (for example `lightningcss`, `satori`, `@resvg/resvg-wasm`, `@vercel/og` and `axe-core`) are build and test tools; MPL-2.0 applies at the file level.
 
 ## Keeping this current
 
