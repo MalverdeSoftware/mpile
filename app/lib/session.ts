@@ -4,17 +4,20 @@ import {
   cardSchema,
   draftSchema,
   MAX_CARDS,
+  MAX_NEW_CARDS,
   uniqueCards,
   validateBody,
   type Card,
   type ResponseBody,
-  type Study,
-  type StudyResponse,
+  type SortResponse,
 } from "./model.ts";
 
-// What a researcher shares with participants, sealed in the session (sort mode only in round 1).
+// What a researcher shares with participants, sealed in the session.
+// v1 is a plain sort. v2 also lets each participant add cards of their own; the separate name makes a site running
+// older code refuse a v2 session instead of opening it as a plain sort.
 export const SORT_SCHEMA = "mpile-sort/v1";
-export const definitionSchema = z.object({
+export const GENERATE_SCHEMA = "mpile-sort/v2";
+const sortSchema = z.object({
   schema: z.literal(SORT_SCHEMA),
   title: z.string().trim().min(1).max(160),
   instructions: z.string().trim().max(4000),
@@ -23,7 +26,20 @@ export const definitionSchema = z.object({
   randomize: z.boolean(),
   cards: z.array(cardSchema).min(1).max(MAX_CARDS),
 });
+const generateSchema = sortSchema.extend({
+  schema: z.literal(GENERATE_SCHEMA),
+  generationPrompt: z.string().trim().min(1).max(2000),
+  maxNewCards: z.number().int().min(1).max(MAX_NEW_CARDS),
+});
+export const definitionSchema = z.discriminatedUnion("schema", [sortSchema, generateSchema]);
 export type SortDefinition = z.infer<typeof definitionSchema>;
+export type Generation = { prompt: string; maxNewCards: number };
+
+// What participants may add in this activity, or null for a plain sort.
+export const generationOf = (definition: SortDefinition): Generation | null =>
+  definition.schema === GENERATE_SCHEMA
+    ? { prompt: definition.generationPrompt, maxNewCards: definition.maxNewCards }
+    : null;
 
 // Baseline text for researchers to adapt. Consent and assent happen outside the app (for example in REDCap).
 export const BASELINE = {
@@ -41,6 +57,7 @@ export function buildDefinition(input: {
   participantInfo: string;
   randomize: boolean;
   cardTexts: string[];
+  generation?: Generation | null;
 }): SortDefinition {
   const texts = input.cardTexts.map((t) => t.trim()).filter(Boolean);
   if (!texts.length) throw new Error("Add at least one card.");
@@ -49,14 +66,23 @@ export function buildDefinition(input: {
   if (repeated) throw new Error(`Each card must be different: “${repeated}” appears more than once.`);
   const width = String(texts.length).length;
   const cards = texts.map((text, i) => ({ id: `c${String(i + 1).padStart(width, "0")}`, text }));
+  const { generation } = input;
+  if (generation) {
+    if (!generation.prompt.trim()) throw new Error("Write the prompt participants read before they add cards.");
+    if (!Number.isInteger(generation.maxNewCards) || generation.maxNewCards < 1 || generation.maxNewCards > MAX_NEW_CARDS)
+      throw new Error(`Participants can add from 1 to ${MAX_NEW_CARDS} cards.`);
+    if (cards.length + generation.maxNewCards > MAX_CARDS)
+      throw new Error(`Your cards and the cards a participant may add must total ${MAX_CARDS} or fewer.`);
+  }
   const definition = {
-    schema: SORT_SCHEMA,
+    schema: generation ? GENERATE_SCHEMA : SORT_SCHEMA,
     title: input.title,
     instructions: input.instructions,
     help: input.help,
     participantInfo: input.participantInfo,
     randomize: input.randomize,
     cards,
+    ...(generation ? { generationPrompt: generation.prompt, maxNewCards: generation.maxNewCards } : {}),
   };
   const parsed = definitionSchema.safeParse(definition);
   if (!parsed.success) throw new Error(firstIssue(parsed.error));
@@ -68,27 +94,6 @@ export function readDefinition(value: unknown): SortDefinition {
   if (!parsed.success || !uniqueCards(parsed.data.cards))
     throw new Error("This activity could not be read. Ask the study team for a new link.");
   return parsed.data;
-}
-
-// The existing analysis and export code works on Study and StudyResponse; these adapters feed it.
-export function toStudy(definition: SortDefinition): Study {
-  return {
-    id: "session",
-    title: definition.title,
-    config: {
-      mode: "sort",
-      instructions: definition.instructions,
-      generationPrompt: "",
-      help: definition.help,
-      participantInfo: definition.participantInfo,
-      randomize: definition.randomize,
-      maxNewCards: 1,
-    },
-    cards: definition.cards,
-    phase: "sorting",
-    revision: 1,
-    createdAt: "",
-  };
 }
 
 // Runs the same checks the server used to: piles, assignments and card IDs must be consistent.
@@ -104,7 +109,7 @@ export function checkDraft(definition: SortDefinition, value: unknown): Response
 function check(schema: typeof bodySchema, definition: SortDefinition, value: unknown): ResponseBody {
   const parsed = schema.safeParse(value);
   if (!parsed.success) throw new Error(firstIssue(parsed.error));
-  validateBody(toStudy(definition), "sort", parsed.data);
+  validateBody(definition.cards, generationOf(definition)?.maxNewCards ?? 0, parsed.data);
   return parsed.data;
 }
 
@@ -114,18 +119,15 @@ export const UNKNOWN_LABEL = "(not in this key file)";
 export type Collected = { label: string | null; kind: "SUBMITTED" | "DRAFT"; body: unknown; updatedAt: string };
 
 export function toResponses(definition: SortDefinition, collected: Collected[]) {
-  const responses: StudyResponse[] = [];
+  const responses: SortResponse[] = [];
   const problems: { label: string; reason: string }[] = [];
   for (const item of collected) {
     const label = item.label ?? UNKNOWN_LABEL;
     try {
       responses.push({
         id: label,
-        revision: 1,
-        kind: "sort",
         body: (item.kind === "SUBMITTED" ? checkResponse : checkDraft)(definition, item.body),
         status: item.kind === "SUBMITTED" ? "submitted" : "draft",
-        version: 0,
         updatedAt: item.updatedAt,
       });
     } catch (e) {

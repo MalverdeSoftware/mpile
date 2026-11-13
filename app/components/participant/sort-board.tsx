@@ -25,12 +25,14 @@ export type BoardView = "unsorted" | "piles";
 const UNSORTED = "unsorted";
 const NEW_PILE = "new-pile";
 
-export function SortCard({ card, body, disabled, onMove, onNewPile }: {
+export function SortCard({ card, body, disabled, onMove, onNewPile, onRemove }: {
   card: Card;
   body: ResponseBody;
   disabled: boolean;
   onMove: (card: string, pile: string | null) => void;
   onNewPile: (card: string) => void;
+  /** Given for a card the participant added, which they may take back. */
+  onRemove?: (card: string) => void;
 }) {
   const current = body.assignments[card.id] || UNSORTED;
   const options = [
@@ -44,9 +46,19 @@ export function SortCard({ card, body, disabled, onMove, onNewPile }: {
       draggable={!disabled}
       onDragStart={(e) => e.dataTransfer.setData("text/plain", card.id)}
     >
-      <p className="sort-card__text">
-        <Text>{card.text}</Text>
-      </p>
+      <div>
+        <p className="sort-card__text">
+          <Text>{card.text}</Text>
+        </p>
+        {onRemove && (
+          <p className="sort-card__own">
+            <Text info>Yours</Text>
+            <Button inline danger disabled={disabled} aria-label={`Remove your card ${card.text}`} onClick={() => onRemove(card.id)}>
+              Remove
+            </Button>
+          </p>
+        )}
+      </div>
       <Select
         type={Select.Type.CUSTOM}
         popupClassName="touch-menu"
@@ -114,8 +126,23 @@ export default function SortBoard({ cards, body, disabled, view, onChange }: {
     setNamingFor(null);
     setMenuPile("");
   }
+  const own = new Set(body.generated.map((c) => c.id));
+  const removeOwn = (card: string) =>
+    onChange((b) => ({
+      ...b,
+      generated: b.generated.filter((c) => c.id !== card),
+      assignments: Object.fromEntries(Object.entries(b.assignments).filter(([id]) => id !== card)),
+    }));
   const renderCard = (card: Card) => (
-    <SortCard key={card.id} card={card} body={body} disabled={disabled} onMove={move} onNewPile={setNamingFor} />
+    <SortCard
+      key={card.id}
+      card={card}
+      body={body}
+      disabled={disabled}
+      onMove={move}
+      onNewPile={setNamingFor}
+      onRemove={own.has(card.id) ? removeOwn : undefined}
+    />
   );
   return (
     <>

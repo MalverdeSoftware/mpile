@@ -160,6 +160,13 @@ h2.zone-title {
   white-space: pre-wrap;
 }
 
+.sort-card__own {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  margin: 0.125rem 0 0;
+}
+
 .sort-card__grip {
   color: var(--ring-icon-color);
 }

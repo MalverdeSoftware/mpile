@@ -17,9 +17,10 @@ Consent and assent happen outside the app, for example in REDCap. Send links onl
 3. Add the **cards**: one per line, or import a CSV with a `text` column. At most 100 different cards, each up to 300 characters.
 4. Add the **participant codes**, separated by commas or lines. Ranges such as `Y01-Y12` work.
 5. Choose how many **days** until the session deletes itself: 14 by default, at most 30.
-6. Under **What participants read**, adapt the baseline instructions, help and participant information to your study.
-7. Leave the **relay address** as it is for a real session. Any other address shows a development warning, and its links work only on your computer.
-8. Choose **Prepare session**. Each participant gets a personal link and a six-digit passcode. This takes a few seconds and happens on your computer.
+6. To let each participant add cards of their own, tick **Let participants add their own cards**. Write the **prompt** they read first, such as "What else comes to mind? Add a card for each one", and set how many cards each person may add (5 by default, at most 30). Their cards are sorted along with yours, and no participant sees another's.
+7. Under **What participants read**, adapt the baseline instructions, help and participant information to your study.
+8. Leave the **relay address** as it is for a real session. Any other address shows a development warning, and its links work only on your computer.
+9. Choose **Prepare session**. Each participant gets a personal link and a six-digit passcode. This takes a few seconds and happens on your computer.
 
 ## 2. Save the key file, then publish
 
@@ -64,6 +65,8 @@ Choose **Collect responses**. The console opens the sealed responses on your com
 - **Pairwise similarity (CSV):** for each pair of cards, how often they were put together among the sorts that placed both. Missing values are blank, not zero.
 - **Not submitted: drafts (CSV):** the same layout, for drafts only. Drafts never appear in the submitted file or the analysis.
 - **Archive (JSON):** the activity and everything collected, with codes, kinds and times. It keeps the original text exactly.
+
+If participants could add their own cards, those cards are in the two sorts files, with `participant` in the `card_origin` column (your cards say `shared`). Pairwise similarity and the analysis views compare your cards only.
 
 The CSV files open in spreadsheets, with accents and emoji intact. Cells that start like a formula are escaped. The console also shows the co-sorting matrix, connection map and clustering for the submitted sorts. See [Methods](METHODS.md).
 

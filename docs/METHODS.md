@@ -12,7 +12,7 @@ A pile is a participant's grouping, not a predetermined category. Pile names and
 
 Shared cards have stable IDs. For each submitted sorting response, the app records one pile ID or an unsorted value per card. Generated cards have their own IDs and remain in that response's qualitative record. They are not matched by text to other participants' additions.
 
-The collect-review-sort workflow establishes a common card set before sorting. Each published card can retain `response_id:original_card_id` source references. Original contributions remain in the archive. The researcher decides which meanings should be combined; the app offers only exact-text duplicate combination.
+The collect-review-sort workflow, which the current app does not include, establishes a common card set before sorting. Each published card can retain `response_id:original_card_id` source references. Original contributions remain in the archive. The researcher decides which meanings should be combined; the app offers only exact-text duplicate combination.
 
 ## Pairwise similarity
 

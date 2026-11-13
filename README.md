@@ -7,7 +7,8 @@ mPile is a card-sorting tool for research and community activities. Each partici
 ## What it does
 
 - **Everyone sorts the same cards.** The researcher types in text cards or imports a CSV in the researcher console, which runs only on their own computer. Each participant gets a personal link and a six-digit passcode.
-- **Sorting is private.** Each participant sorts on their own and never sees anyone else's piles. This first release doesn't include the card-generation or collect-review-sort activities described in [methods](docs/METHODS.md).
+- **Sorting is private.** Each participant sorts on their own and never sees anyone else's piles.
+- **Participants can add their own cards, if you let them.** You write a prompt and set how many cards each person may add. They sort their own cards along with yours, and nobody else sees them. The collect-review-sort activity described in [methods](docs/METHODS.md) isn't included.
 - **Participants make their own piles.** They create and name piles, explain their groupings if they want to, and put each card in one pile or leave it unsorted. Dragging, touch-friendly menus, and keyboard controls all work.
 - **Work saves as people go.** It is sealed in the browser before it reaches the relay, and it continues on another device with the same link and passcode. Submitting is final.
 - **Only the researcher can read the responses.** The researcher keeps the session's key file, which is the only way to open them. The console opens the sealed responses on the researcher's computer, shows progress, and adds or removes participants.

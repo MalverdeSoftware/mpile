@@ -7,40 +7,20 @@ import {
   parseCards,
   membershipRows,
 } from "../lib/analysis.ts";
-import { validateBody, emptyBody } from "../lib/model.ts";
-import type { Study, StudyResponse } from "../lib/model.ts";
+import { validateBody, emptyBody, sameText } from "../lib/model.ts";
+import type { SortResponse } from "../lib/model.ts";
 const cards = [
   { id: "a", text: "Alpha" },
   { id: "b", text: "Beta" },
   { id: "c", text: "Gamma" },
 ];
-const study: Study = {
-  id: "s",
-  title: "Test",
-  phase: "sorting",
-  revision: 1,
-  createdAt: "",
-  cards,
-  config: {
-    mode: "sort",
-    instructions: "",
-    generationPrompt: "",
-    help: "",
-    participantInfo: "",
-    randomize: true,
-    maxNewCards: 30,
-  },
-};
 const r = (
   id: string,
   assignments: Record<string, string | null>,
   status: "draft" | "submitted" = "submitted",
-): StudyResponse => ({
+): SortResponse => ({
   id,
-  revision: 1,
-  kind: "sort",
   status,
-  version: 0,
   updatedAt: "",
   body: {
     ...emptyBody(),
@@ -51,16 +31,14 @@ const r = (
     ],
   },
 });
-test("pair-specific denominators exclude unsorted, drafts, generation, and old revisions", () => {
+test("pair-specific denominators exclude unsorted cards and drafts", () => {
   const data = [
     r("1", { a: "x", b: "x", c: "y" }),
     r("2", { a: "x", b: null, c: "x" }),
     r("3", { a: "x", b: "y", c: "y" }),
     r("draft", { a: "x", b: "x", c: "x" }, "draft"),
-    { ...r("old", { a: "x", b: "x", c: "x" }), revision: 0 },
-    { ...r("collect", {}), kind: "collect" as const },
   ];
-  const p = pairwise(cards, data, 1);
+  const p = pairwise(cards, data);
   assert.deepEqual(p[0], {
     a: "a",
     b: "b",
@@ -73,14 +51,14 @@ test("pair-specific denominators exclude unsorted, drafts, generation, and old r
   assert.equal(p[2].similarity, 0.5);
 });
 test("unobserved pairs remain missing and prevent fabricated clustering", () => {
-  const p = pairwise(cards, [r("1", { a: "x" })], 1);
+  const p = pairwise(cards, [r("1", { a: "x" })]);
   assert.ok(p.every((p) => p.similarity === null));
   assert.equal(averageLinkage(cards, p), null);
 });
 test("average linkage joins identical cards first and uses mean cross-cluster distance", () => {
   const tree = averageLinkage(
     cards,
-    pairwise(cards, [r("1", { a: "x", b: "x", c: "y" })], 1),
+    pairwise(cards, [r("1", { a: "x", b: "x", c: "y" })]),
   )!;
   assert.equal(tree.height, 1);
   const pair = tree.left?.members.length === 2 ? tree.left : tree.right;
@@ -96,7 +74,7 @@ test("pile label changes do not affect co-sorting", () => {
       piles: a.body.piles.map((p) => ({ ...p, name: "Different wording" })),
     },
   };
-  assert.deepEqual(pairwise(cards, [a], 1), pairwise(cards, [b], 1));
+  assert.deepEqual(pairwise(cards, [a]), pairwise(cards, [b]));
 });
 test("quoted CSV, escaped quotes, CRLF, embedded newlines and BOM", () => {
   assert.deepEqual(
@@ -120,20 +98,37 @@ test("export includes unsorted and original labels", () => {
   assert.equal(rows[1][8], "First");
   assert.equal(rows[2][7], "");
 });
-test("server validation rejects unknown piles, duplicate placement IDs, and unauthorized generation", () => {
-  const a = r("1", { a: "missing" }).body;
-  assert.throws(() => validateBody(study, "sort", a), /could not be found/);
+test("a participant's added cards are exported as theirs and stay out of the shared-card analysis", () => {
+  const plain = r("1", { a: "x", b: "x", c: "y" });
+  const withOwn: SortResponse = {
+    ...plain,
+    body: {
+      ...plain.body,
+      generated: [{ id: "g-1", text: "Mine" }],
+      assignments: { ...plain.body.assignments, "g-1": "x" },
+    },
+  };
+  assert.deepEqual(pairwise(cards, [withOwn]), pairwise(cards, [plain]));
+  const rows = membershipRows(cards, [withOwn]);
+  assert.equal(rows.length, 1 + 4);
+  assert.deepEqual(rows[0].slice(0, 7), ["response_id", "revision", "stage", "status", "card_id", "card_text", "card_origin"]);
+  assert.deepEqual(rows[1].slice(0, 7), ["1", 1, "sort", "submitted", "a", "Alpha", "shared"]);
+  assert.deepEqual(rows[4].slice(4, 9), ["g-1", "Mine", "participant", "x", "First"]);
+});
+test("validation rejects unknown piles, duplicate pile IDs, and cards the activity does not allow", () => {
+  const unknown = r("1", { a: "missing" }).body;
+  assert.throws(() => validateBody(cards, 0, unknown), /could not be found/);
+  const own = { ...emptyBody(), generated: [{ id: "new", text: "New" }] };
+  assert.throws(() => validateBody(cards, 0, own), /provided cards only/);
+  assert.doesNotThrow(() => validateBody(cards, 1, { ...own, assignments: { new: null } }));
   assert.throws(
-    () =>
-      validateBody(study, "sort", {
-        ...emptyBody(),
-        generated: [{ id: "new", text: "New" }],
-      }),
-    /provided cards only/,
+    () => validateBody(cards, 1, { ...own, generated: [...own.generated, { id: "more", text: "More" }] }),
+    /up to 1 added/,
   );
+  assert.throws(() => validateBody(cards, 2, { ...emptyBody(), generated: [{ id: "a", text: "Clash" }] }), /distinct/);
   assert.throws(
     () =>
-      validateBody(study, "sort", {
+      validateBody(cards, 0, {
         ...emptyBody(),
         piles: [
           { id: "x", name: "X", description: "" },
@@ -142,5 +137,9 @@ test("server validation rejects unknown piles, duplicate placement IDs, and unau
       }),
     /unique/,
   );
-  assert.doesNotThrow(() => validateBody(study, "sort", emptyBody()));
+  assert.doesNotThrow(() => validateBody(cards, 0, emptyBody()));
+});
+test("card text is compared ignoring case and spacing", () => {
+  assert.ok(sameText("  Family  time ", "family time"));
+  assert.ok(!sameText("Family", "Families"));
 });

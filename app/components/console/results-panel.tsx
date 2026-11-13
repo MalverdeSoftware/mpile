@@ -7,7 +7,7 @@ import { withIcon } from "@malverdesoftware/ui/controls";
 import AnalysisView from "../analysis-view";
 import { download } from "@/lib/client";
 import { exportFiles, type Collection } from "@/lib/console";
-import { toStudy } from "@/lib/session";
+import { generationOf } from "@/lib/session";
 
 export default function ResultsPanel({
   title,
@@ -49,6 +49,12 @@ export default function ResultsPanel({
               <span>Could not be used</span>
               <strong>{collection.problems.length}</strong>
             </div>
+            {generationOf(collection.definition) && (
+              <div>
+                <span>Cards added by participants</span>
+                <strong>{collection.submitted.reduce((n, s) => n + s.body.generated.length, 0)}</strong>
+              </div>
+            )}
           </div>
           {collection.problems.length > 0 && (
             <div role="alert">
@@ -73,8 +79,10 @@ export default function ResultsPanel({
           </div>
           <p className="secondary-text">
             Drafts appear only in the not-submitted file and the archive, never in the submitted sorts or the analysis.
+            {generationOf(collection.definition) &&
+              " Cards participants added are in the sorts files, marked “participant” under card_origin; the analysis compares your cards only."}
           </p>
-          <AnalysisView study={toStudy(collection.definition)} responses={collection.submitted} />
+          <AnalysisView cards={collection.definition.cards} responses={collection.submitted} />
         </>
       )}
     </section>

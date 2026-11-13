@@ -11,6 +11,7 @@ import { prepareSession, type SessionFile } from "@malverdesoftware/session-clie
 import { Frame } from "../frame";
 import { parseCards } from "@/lib/analysis";
 import { BASELINE, buildDefinition, parseLabels, type SortDefinition } from "@/lib/session";
+import { MAX_CARDS, MAX_NEW_CARDS } from "@/lib/model";
 import { PRODUCTION_RELAY, isProductionRelay, participantUrlFor } from "@/lib/console";
 import { describe } from "./errors";
 
@@ -26,6 +27,9 @@ export default function CreateSession({
   const [labelText, setLabelText] = useState("");
   const [days, setDays] = useState(14);
   const [randomize, setRandomize] = useState(true);
+  const [generate, setGenerate] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const [maxNew, setMaxNew] = useState(5);
   const [text, setText] = useState(BASELINE);
   const [relayUrl, setRelayUrl] = useState(PRODUCTION_RELAY);
   const [preparing, setPreparing] = useState(0);
@@ -47,7 +51,13 @@ export default function CreateSession({
     e.preventDefault();
     setError("");
     try {
-      const definition = buildDefinition({ title: title.trim(), ...text, randomize, cardTexts: cards });
+      const definition = buildDefinition({
+        title: title.trim(),
+        ...text,
+        randomize,
+        cardTexts: cards,
+        generation: generate ? { prompt: prompt.trim(), maxNewCards: maxNew } : null,
+      });
       const participantLabels = parseLabels(labelText);
       if (!participantLabels.length) throw new Error("Add at least one participant code.");
       setPreparing(participantLabels.length);
@@ -97,7 +107,7 @@ export default function CreateSession({
               multiline
               id="cards"
               size={Size.FULL}
-              label={`Cards · ${cards.length} / 100`}
+              label={`Cards · ${cards.length} / ${MAX_CARDS}`}
               help="One card per line, or a CSV with a text column. Up to 100 different cards of 300 characters. Use synthetic cards until the readiness check has passed."
               rows={8}
               required
@@ -136,6 +146,36 @@ export default function CreateSession({
             onChange={(e) => setRandomize(e.target.checked)}
             label="Show the cards in a different order to each participant"
           />
+          <Checkbox
+            checked={generate}
+            onChange={(e) => setGenerate(e.target.checked)}
+            label="Let participants add their own cards"
+          />
+          {generate && (
+            <div className="stack">
+              <Input
+                multiline
+                size={Size.FULL}
+                label="Prompt · participants read this before adding cards"
+                help="For example: What else comes to mind? Add a card for each one. Each participant sees only their own cards."
+                rows={2}
+                required
+                maxLength={2000}
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+              />
+              <Input
+                type="number"
+                size={Size.M}
+                label="Cards each participant may add"
+                min={1}
+                max={MAX_NEW_CARDS}
+                required
+                value={maxNew}
+                onChange={(e) => setMaxNew(Number(e.target.value))}
+              />
+            </div>
+          )}
           <details className="console-details">
             <summary>What participants read</summary>
             <div className="stack">
