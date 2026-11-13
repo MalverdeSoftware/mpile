@@ -1,10 +1,9 @@
 import { csv, membershipRows, pairwise } from "./analysis.ts";
 import type { StudyResponse } from "./model.ts";
-import { fileSlug, toResponses, toStudy, type SortDefinition } from "./session.ts";
+import { UNKNOWN_LABEL, fileSlug, toResponses, toStudy, type SortDefinition } from "./session.ts";
 
 // Researcher console helpers. The console runs on the researcher's own computer; nothing here touches secrets.
 export const PRODUCTION_RELAY = "https://mpile.app/relay";
-// The same relay at its earlier address, which still serves it, so key files saved before the rename count as production.
 export const CREATION_KEY_STORAGE = "mpile:creation-key";
 
 // Participants open their links on the same site that serves the relay.
@@ -37,7 +36,7 @@ export function summarize(definition: SortDefinition, items: CollectedItem[], co
   for (const item of items)
     if (item.kind === "UNREADABLE")
       problems.push({
-        label: item.label ?? "(not in this key file)",
+        label: item.label ?? UNKNOWN_LABEL,
         reason: item.problem === "NO_KEY" ? "This key file has no key for it (an older copy of the file?)." : "It could not be opened.",
       });
   return {
@@ -60,8 +59,14 @@ export function exportFiles(title: string, c: Collection) {
   const slug = fileSlug(title);
   const study = toStudy(c.definition);
   return [
-    { name: `${slug}-submitted-memberships.csv`, type: "text/csv;charset=utf-8", text: memberships(c, c.submitted) },
     {
+      label: "Submitted sorts (CSV)",
+      name: `${slug}-submitted-memberships.csv`,
+      type: "text/csv;charset=utf-8",
+      text: memberships(c, c.submitted),
+    },
+    {
+      label: "Pairwise similarity (CSV)",
       name: `${slug}-pairwise-similarity.csv`,
       type: "text/csv;charset=utf-8",
       text: csv([
@@ -69,8 +74,14 @@ export function exportFiles(title: string, c: Collection) {
         ...pairwise(study.cards, c.submitted, study.revision).map((p) => [p.a, p.b, p.together, p.compared, p.exposed, p.similarity]),
       ]),
     },
-    { name: `${slug}-not-submitted.csv`, type: "text/csv;charset=utf-8", text: memberships(c, c.drafts) },
     {
+      label: "Not submitted: drafts (CSV)",
+      name: `${slug}-not-submitted.csv`,
+      type: "text/csv;charset=utf-8",
+      text: memberships(c, c.drafts),
+    },
+    {
+      label: "Archive of everything collected (JSON)",
       name: `${slug}-archive.json`,
       type: "application/json",
       text: JSON.stringify(
