@@ -17,7 +17,7 @@ The app bundles these packages into the participant pages and the Cloudflare Wor
 | JetBrains Ring UI (`@jetbrains/ring-ui-built`) | 7.0.133 | Apache-2.0 | 2000–2016 JetBrains s.r.o. |
 | JetBrains Icons (`@jetbrains/icons`) | 5.24.0 | Apache-2.0 | 2010–2017 JetBrains s.r.o. |
 | Mona Sans (`@fontsource-variable/mona-sans`) | 5.3.0 | SIL Open Font License 1.1 | 2022 The Mona Sans Project Authors, with Reserved Font Name "Mona" |
-| `@malverdesoftware/relay`, `sealed-envelope`, `session-client`, `ui` | 0.1.1, 0.1.2, 0.1.3, 0.1.1 | Apache-2.0 | 2026 The Johns Hopkins University |
+| `@malverdesoftware/relay`, `sealed-envelope`, `session-client`, `ui` | 0.1.1, 0.1.2, 0.1.4, 0.1.1 | Apache-2.0 | 2026 The Johns Hopkins University |
 
 - **Mona Sans** is served to browsers as web font files under the [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/). The font is not modified.
 
