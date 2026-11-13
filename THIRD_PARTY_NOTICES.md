@@ -1,38 +1,49 @@
 # Third-party notices
 
-mPile uses third-party software. Each package keeps its own license, and nothing in this repository changes those terms. This summary was generated from `app/package-lock.json` on 2026-11-11. The lockfile's `license` fields are the complete, per-package record.
+mPile is free, open-source software under the [Apache License 2.0](LICENSE) (see also [NOTICE](NOTICE)). It is built on open-source software by others. Each of those packages keeps its own license, and nothing in this repository changes those terms.
 
-## App (`app/`)
+This summary was generated from `app/package-lock.json` on 2026-11-13. The lockfile records each package's license, and each installed package carries its own license file.
 
-628 packages in the lockfile (direct and transitive, runtime and development).
+## In the live site (mpile.app)
+
+The app bundles these packages into the participant pages and the Cloudflare Worker that serves them and the relay.
+
+| Package | Version | License | Copyright |
+|---|---|---|---|
+| React, React DOM (`react`, `react-dom`) | 19.2.6 | MIT | Meta Platforms, Inc. and affiliates |
+| Next.js (`next`) | 16.3.4 | MIT | 2025 Vercel, Inc. |
+| Vinext (`vinext`), which builds the app's Next.js routes with Vite for Cloudflare Workers; its runtime code is bundled although npm lists it as a development dependency | 1.0.0-beta.5 | MIT | 2026 Cloudflare, Inc. |
+| Zod (`zod`) | 3.25.76 | MIT | 2025 Colin McDonnell |
+| JetBrains Ring UI (`@jetbrains/ring-ui-built`) | 7.0.133 | Apache-2.0 | 2000–2016 JetBrains s.r.o. |
+| JetBrains Icons (`@jetbrains/icons`) | 5.24.0 | Apache-2.0 | 2010–2017 JetBrains s.r.o. |
+| Mona Sans (`@fontsource-variable/mona-sans`) | 5.3.0 | SIL Open Font License 1.1 | 2022 The Mona Sans Project Authors, with Reserved Font Name "Mona" |
+| `@malverdesoftware/relay`, `sealed-envelope`, `session-client`, `ui` | 0.1.1, 0.1.2, 0.1.3, 0.1.1 | Apache-2.0 | 2026 The Johns Hopkins University |
+
+- **Mona Sans** is served to browsers as web font files under the [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/). The font is not modified.
+- **Sites Vite plugin** (`app/build/sites-vite-plugin.ts`), vendored in this repository: MIT, copyright 2026 OpenAI. Its license is in `app/build/sites-vite-plugin.LICENSE`.
+
+All 101 runtime packages in the lockfile, including those the packages above depend on:
 
 | License | Packages |
 |---|---|
-| MIT | 500 |
-| Apache-2.0 (including one written "Apache 2.0") | 45 |
-| ISC | 19 |
-| MPL-2.0 | 16 |
-| BSD-2-Clause | 11 |
-| LGPL-3.0-or-later (alone or combined with Apache-2.0/MIT) | 15 |
-| BSD-3-Clause | 6 |
-| MIT OR Apache-2.0 | 4 |
-| CC0-1.0 | 2 |
-| OFL-1.1, CC-BY-4.0, BlueOak-1.0.0, Python-2.0, 0BSD | 5 |
-| No license field in the lockfile | 5 |
+| MIT | 55 |
+| Apache-2.0 | 23 |
+| LGPL-3.0-or-later, alone or with Apache-2.0 or MIT | 15 |
+| BSD-3-Clause | 2 |
+| ISC | 2 |
+| OFL-1.1 | 1 |
+| CC-BY-4.0 | 1 |
+| 0BSD | 1 |
+| No license field in npm metadata | 1 |
 
-Items that need attribution or a note:
+- **LGPL-3.0-or-later:** these are the `@img/sharp-*` and `@img/sharp-libvips-*` platform binaries, which Next.js installs as optional dependencies for image processing on Node. They are not part of the deployed site, because mPile runs on Cloudflare Workers and its build doesn't include them. Their source is available from the [libvips](https://github.com/libvips/libvips) and [sharp](https://github.com/lovell/sharp) projects.
+- **CC-BY-4.0:** `caniuse-lite`, browser-support data used when building. It isn't in the pages browsers download.
+- **No license field:** **scrollbar-width** 3.1.1. Its own LICENSE file is MIT, copyright 2014 Olmo Kramer.
 
-- **JetBrains Ring UI** (`@jetbrains/ring-ui-built`) and **JetBrains Icons** (`@jetbrains/icons`): Apache-2.0.
-- **Mona Sans** (`@fontsource-variable/mona-sans`): SIL Open Font License 1.1. The font license text must stay with any redistributed font files.
-- **libvips binaries** (`@img/sharp-libvips-*`, `@img/sharp-*`), installed as optional platform binaries by `sharp` (Apache-2.0): LGPL-3.0-or-later. They are separate libraries, and their source is available from the libvips project.
-- **MPL-2.0 packages** (for example `lightningcss`, `satori`, `@resvg/resvg-wasm`, `@vercel/og`, `axe-core`): used by the build and test toolchain (development dependencies). MPL-2.0 applies at the file level.
-- **caniuse-lite**: CC-BY-4.0 data.
-- **combokeys**: Apache-2.0 (the package metadata writes it as "Apache 2.0").
-- **scrollbar-width**: its npm metadata has no license field. Its GitHub repository (olmokramer/scrollbar-width.js) carries the MIT license, copyright 2014 Olmo Kramer.
-- **Sites Vite plugin** (vendored): MIT, copyright 2026 OpenAI. The license is preserved in `app/build/sites-vite-plugin.LICENSE`.
-- **`@malverdesoftware/relay`, `@malverdesoftware/sealed-envelope`, `@malverdesoftware/session-client`, `@malverdesoftware/ui`**: this project's own shared packages, installed from npm (relay 0.1.1, sealed-envelope 0.1.2, session-client 0.1.3, ui 0.1.1). They are licensed under Apache-2.0, copyright The Johns Hopkins University, and each carries its LICENSE and NOTICE.
+## Build and test tools (not in the live site)
 
-## Review before release
+527 development packages run only when building and testing, apart from Vinext's runtime code (listed above): MIT 445, Apache-2.0 26, ISC 17, MPL-2.0 16, BSD-2-Clause 11, MIT OR Apache-2.0 4, BSD-3-Clause 4, CC0-1.0 2, BlueOak-1.0.0 1, and Python-2.0 1. The MPL-2.0 packages (for example `lightningcss`, `satori`, `@resvg/resvg-wasm`, `@vercel/og` and `axe-core`) are build and test tools; MPL-2.0 applies at the file level.
 
-- Re-run this inventory when dependencies change and before the first public release.
-- This project's own code is Apache-2.0 (2026-11-12), which is compatible with the Apache-2.0 packages above.
+## Keeping this current
+
+This file is regenerated when dependencies change. If you find a missing or wrong attribution, please [open an issue](https://github.com/MalverdeSoftware/mpile/issues).
