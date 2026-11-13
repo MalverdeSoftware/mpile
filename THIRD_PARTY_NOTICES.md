@@ -20,7 +20,6 @@ The app bundles these packages into the participant pages and the Cloudflare Wor
 | `@malverdesoftware/relay`, `sealed-envelope`, `session-client`, `ui` | 0.1.1, 0.1.2, 0.1.3, 0.1.1 | Apache-2.0 | 2026 The Johns Hopkins University |
 
 - **Mona Sans** is served to browsers as web font files under the [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/). The font is not modified.
-- **Sites Vite plugin** (`app/build/sites-vite-plugin.ts`), vendored in this repository: MIT, copyright 2026 OpenAI. Its license is in `app/build/sites-vite-plugin.LICENSE`.
 
 All 101 runtime packages in the lockfile, including those the packages above depend on:
 

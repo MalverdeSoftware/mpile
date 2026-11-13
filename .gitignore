@@ -5,7 +5,6 @@ node_modules/
 *.tsbuildinfo
 .env*
 .wrangler/
-.sites-runtime/
 
 # Phase 0 local build evidence and editor state
 .phase0/
