@@ -1,4 +1,4 @@
-import type { Card, StudyResponse } from "./model";
+import type { Card, SortResponse } from "./model";
 export type Pair = {
   a: string;
   b: string;
@@ -14,15 +14,9 @@ export type Cluster = {
   left?: Cluster;
   right?: Cluster;
 };
-export function pairwise(
-  cards: Card[],
-  responses: StudyResponse[],
-  revision: number,
-): Pair[] {
-  const eligible = responses.filter(
-    (r) =>
-      r.status === "submitted" && r.kind === "sort" && r.revision === revision,
-  );
+// Co-sorting of the shared cards across submitted sorts. Cards a participant added are not part of it.
+export function pairwise(cards: Card[], responses: SortResponse[]): Pair[] {
+  const eligible = responses.filter((r) => r.status === "submitted");
   const pairs: Pair[] = [];
   for (let i = 0; i < cards.length; i++)
     for (let j = i + 1; j < cards.length; j++) {
@@ -105,7 +99,8 @@ function safeCell(value: unknown) {
 export function csv(rows: unknown[][]) {
   return "\uFEFF" + rows.map((row) => row.map(safeCell).join(",")).join("\r\n");
 }
-export function membershipRows(cards: Card[], responses: StudyResponse[]) {
+// One row per card per response. `revision` and `stage` are constant: they keep the columns of earlier exports.
+export function membershipRows(cards: Card[], responses: SortResponse[]) {
   const rows: unknown[][] = [
     [
       "response_id",
@@ -123,14 +118,13 @@ export function membershipRows(cards: Card[], responses: StudyResponse[]) {
     ],
   ];
   for (const r of responses) {
-    const deck =
-      r.kind === "collect" ? r.body.generated : [...cards, ...r.body.generated];
+    const deck = [...cards, ...r.body.generated];
     for (const c of deck) {
       const pile = r.body.piles.find((p) => p.id === r.body.assignments[c.id]);
       rows.push([
         r.id,
-        r.revision,
-        r.kind,
+        1,
+        "sort",
         r.status,
         c.id,
         c.text,

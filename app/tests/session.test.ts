@@ -6,11 +6,11 @@ import {
   checkDraft,
   checkResponse,
   fileSlug,
+  generationOf,
   orderCards,
   parseLabels,
   readDefinition,
   toResponses,
-  toStudy,
 } from "../lib/session.ts";
 import { membershipRows } from "../lib/analysis.ts";
 
@@ -36,6 +36,47 @@ test("readDefinition accepts only the sort schema", () => {
   assert.deepEqual(readDefinition(JSON.parse(JSON.stringify(definition))), definition);
   assert.throws(() => readDefinition({ ...definition, schema: "other/v1" }), /could not be read/);
   assert.throws(() => readDefinition({ ...definition, cards: [definition.cards[0], definition.cards[0]] }), /could not be read/);
+});
+
+test("a generate-and-sort definition carries the prompt and the limit under its own schema name", () => {
+  const base = { ...definition, cardTexts: ["a", "b"] };
+  const g = buildDefinition({ ...base, generation: { prompt: " What else? ", maxNewCards: 3 } });
+  assert.equal(g.schema, "mpile-sort/v2");
+  assert.deepEqual(generationOf(g), { prompt: "What else?", maxNewCards: 3 });
+  assert.deepEqual(readDefinition(JSON.parse(JSON.stringify(g))), g);
+  // A plain sort is unchanged, and has nothing to add.
+  assert.equal(definition.schema, "mpile-sort/v1");
+  assert.equal(generationOf(definition), null);
+  assert.deepEqual(Object.keys(definition), ["schema", "title", "instructions", "help", "participantInfo", "randomize", "cards"]);
+  // What older site code does with a v2 session: its schema knew only the v1 name.
+  assert.throws(() => readDefinition({ ...g, schema: "mpile-sort/v3" }), /could not be read/);
+  assert.throws(() => readDefinition({ ...g, maxNewCards: 31 }), /could not be read/);
+  assert.throws(() => readDefinition({ ...definition, schema: "mpile-sort/v2" }), /could not be read/);
+  assert.throws(() => buildDefinition({ ...base, generation: { prompt: " ", maxNewCards: 3 } }), /prompt/);
+  assert.throws(() => buildDefinition({ ...base, generation: { prompt: "p", maxNewCards: 0 } }), /1 to 30/);
+  assert.throws(() => buildDefinition({ ...base, generation: { prompt: "p", maxNewCards: 31 } }), /1 to 30/);
+  assert.throws(
+    () => buildDefinition({ ...base, cardTexts: Array.from({ length: 95 }, (_, i) => `c${i}`), generation: { prompt: "p", maxNewCards: 6 } }),
+    /total 100 or fewer/,
+  );
+});
+
+test("a response may hold the participant's own cards only where the activity allows them", () => {
+  const g = buildDefinition({ ...definition, cardTexts: ["a", "b"], generation: { prompt: "What else?", maxNewCards: 2 } });
+  const mine = {
+    generated: [{ id: "g-1", text: "Mine" }],
+    piles: [{ id: "p1", name: "Pile", description: "" }],
+    assignments: { c1: "p1", "g-1": "p1" },
+    notes: "",
+  };
+  assert.deepEqual(checkResponse(g, mine), mine);
+  assert.deepEqual(checkDraft(g, mine), mine);
+  assert.throws(() => checkResponse(definition, mine), /provided cards only/);
+  const three = { ...mine, generated: [1, 2, 3].map((n) => ({ id: `g-${n}`, text: `Mine ${n}` })) };
+  assert.throws(() => checkResponse(g, three), /up to 2 added/);
+  const { responses } = toResponses(g, [{ label: "Y01", kind: "SUBMITTED", body: mine, updatedAt: "2026-11-09T15:00:00.000Z" }]);
+  const rows = membershipRows(g.cards, responses);
+  assert.deepEqual(rows.slice(1).map((row) => [row[4], row[6]]), [["c1", "shared"], ["c2", "shared"], ["g-1", "participant"]]);
 });
 
 test("checkResponse enforces sort-mode rules in the browser", () => {
@@ -75,7 +116,7 @@ test("collected responses feed the existing exports, labeled by participant code
   assert.deepEqual(responses.map((r) => [r.id, r.status]), [["Y01", "submitted"], ["Y02", "draft"]]);
   assert.equal(problems.length, 1);
   assert.equal(problems[0]!.label, "(not in this key file)");
-  const rows = membershipRows(toStudy(definition).cards, responses.filter((r) => r.status === "submitted"));
+  const rows = membershipRows(definition.cards, responses.filter((r) => r.status === "submitted"));
   assert.equal(rows[1]![0], "Y01");
   assert.equal(rows.length, 1 + definition.cards.length);
 });

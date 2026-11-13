@@ -8,9 +8,9 @@ import type { ResponseBody } from "@/lib/model";
 
 // Shows this device's own copy of the sort, if it has one; nothing is fetched from the server.
 export default function Submitted({ definition, copy }: { definition: SortDefinition; copy: ResponseBody | null }) {
-  const text = new Map(definition.cards.map((c) => [c.id, c.text]));
-  const inPile = (pile: string | null) =>
-    definition.cards.filter((c) => (copy?.assignments[c.id] ?? null) === pile).map((c) => c.id);
+  const cards = [...definition.cards, ...(copy?.generated ?? [])];
+  const text = new Map(cards.map((c) => [c.id, c.text]));
+  const inPile = (pile: string | null) => cards.filter((c) => (copy?.assignments[c.id] ?? null) === pile).map((c) => c.id);
   return (
     <main className="page-narrow">
       <Text info>{definition.title}</Text>

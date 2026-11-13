@@ -12,8 +12,9 @@ import { Content, Header } from "@jetbrains/ring-ui-built/components/island/isla
 import ProgressBar from "@jetbrains/ring-ui-built/components/progress-bar/progress-bar";
 import Text from "@jetbrains/ring-ui-built/components/text/text";
 import { ConfirmDialog, ErrorMessage } from "@malverdesoftware/ui/controls";
-import { checkResponse, orderCards, type SortDefinition } from "@/lib/session";
+import { checkResponse, generationOf, orderCards, type SortDefinition } from "@/lib/session";
 import type { ResponseBody } from "@/lib/model";
+import OwnCards from "./own-cards";
 import SortBoard, { count, type BoardView } from "./sort-board";
 import { SYNC_TEXT, useAutosave } from "./use-autosave";
 
@@ -41,7 +42,10 @@ export default function SortWorkspace({ session, definition, initial, seed, onSu
   const [closed, setClosed] = useState(session.isClosed);
   const { state, saveNow } = useAutosave(session, body, !busy && !closed);
   const editable = !busy && !closed && state !== "closed" && state !== "conflict";
-  const cards = useMemo(() => orderCards(definition.cards, definition.randomize, seed), [definition, seed]);
+  const generation = generationOf(definition);
+  const shared = useMemo(() => orderCards(definition.cards, definition.randomize, seed), [definition, seed]);
+  // The participant's own cards come after the shared ones, in the order they were added.
+  const cards = useMemo(() => [...shared, ...body.generated], [shared, body.generated]);
   const assigned = cards.filter((c) => body.assignments[c.id]).length;
 
   async function submit() {
@@ -127,6 +131,9 @@ export default function SortWorkspace({ session, definition, initial, seed, onSu
           <Text>{definition.instructions}</Text>
         </p>
         <ErrorMessage error={confirm ? "" : error} />
+        {generation && (
+          <OwnCards generation={generation} shared={shared} body={body} disabled={!editable} onChange={setBody} />
+        )}
         <SortBoard cards={cards} body={body} disabled={!editable} view={view} onChange={setBody} />
         <section className="panel workspace__finish">
           <Input

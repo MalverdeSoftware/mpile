@@ -10,55 +10,43 @@ import {
   type Cluster,
   type Pair,
 } from "@/lib/analysis";
-import type { Study, StudyResponse, Card } from "@/lib/model";
+import type { SortResponse, Card } from "@/lib/model";
 // Shades of Ring's blue. The text flips to white once that gives the better contrast.
 const cellStyle = (similarity: number) => ({
   background: `rgba(var(--ring-main-hover-components), ${0.08 + similarity * 0.85})`,
   color: similarity > 0.85 ? "white" : "var(--ring-text-color)",
 });
 
+// `cards` are the shared cards: the analysis compares those only, never cards a participant added.
 export default function AnalysisView({
-  study,
+  cards,
   responses,
 }: {
-  study: Study;
-  responses: StudyResponse[];
+  cards: Card[];
+  responses: SortResponse[];
 }) {
-  const pairs = useMemo(
-    () => pairwise(study.cards, responses, study.revision),
-    [study.cards, responses, study.revision],
-  );
-  const tree = useMemo(
-    () => averageLinkage(study.cards, pairs),
-    [study.cards, pairs],
-  );
+  const pairs = useMemo(() => pairwise(cards, responses), [cards, responses]);
+  const tree = useMemo(() => averageLinkage(cards, pairs), [cards, pairs]);
   const [tab, setTab] = useState("matrix"),
     [threshold, setThreshold] = useState(50),
     [minimum, setMinimum] = useState(1);
-  const eligible = responses.filter(
-    (r) =>
-      r.kind === "sort" &&
-      r.status === "submitted" &&
-      r.revision === study.revision,
-  );
+  const eligible = responses.filter((r) => r.status === "submitted");
   if (!eligible.length)
     return (
       <section className="panel stack">
         <H2>Patterns will appear here</H2>
         <p>
-          Analysis uses submitted sorting responses. Drafts and card-generation
-          submissions are kept separately.
+          Analysis uses submitted sorts. Drafts are kept separately.
         </p>
       </section>
     );
-  if (study.cards.length < 2)
+  if (cards.length < 2)
     return (
       <section className="panel stack">
         <H2>No shared-card comparison yet</H2>
         <p>
-          This activity has fewer than two shared cards. Export participants’
-          generated cards and groupings for qualitative review, or collect and
-          review a shared set in a new activity.
+          This activity has fewer than two shared cards, so there are no pairs
+          to compare. The exports still hold every participant’s groupings.
         </p>
       </section>
     );
@@ -72,7 +60,7 @@ export default function AnalysisView({
         </div>
         <div>
           <span>Shared cards</span>
-          <strong>{study.cards.length}</strong>
+          <strong>{cards.length}</strong>
         </div>
         <div>
           <span>Pairs with observations</span>
@@ -85,8 +73,8 @@ export default function AnalysisView({
       <Banner mode="info" withIcon>
         Similarity = times a pair was put together ÷ responses placing both
         cards into piles. Unsorted cards are excluded from that pair’s
-        denominator. Individual additions are preserved in exports but do not
-        enter shared-card analysis.
+        denominator. Cards a participant added are kept in the exports but do
+        not enter this shared-card analysis.
       </Banner>
       <Tabs selected={tab} onSelect={setTab}>
         <Tab id="matrix" title="Co-sorting matrix">
@@ -102,7 +90,7 @@ export default function AnalysisView({
                 <thead>
                   <tr>
                     <th>Card</th>
-                    {study.cards.map((c, i) => (
+                    {cards.map((c, i) => (
                       <th key={c.id} title={c.text}>
                         {i + 1}
                       </th>
@@ -110,12 +98,12 @@ export default function AnalysisView({
                   </tr>
                 </thead>
                 <tbody>
-                  {study.cards.map((c, i) => (
+                  {cards.map((c, i) => (
                     <tr key={c.id}>
                       <th>
                         {i + 1}. {c.text}
                       </th>
-                      {study.cards.map((d, j) => {
+                      {cards.map((d, j) => {
                         const p = pairs.find(
                           (p) =>
                             (p.a === c.id && p.b === d.id) ||
@@ -188,7 +176,7 @@ export default function AnalysisView({
               meaning.
             </p>
             <Network
-              cards={study.cards}
+              cards={cards}
               pairs={pairs.filter(
                 (p) =>
                   p.similarity !== null &&
@@ -207,7 +195,7 @@ export default function AnalysisView({
               exploratory summary does not replace participants’ own categories.
             </p>
             {tree ? (
-              <Dendrogram tree={tree} cards={study.cards} />
+              <Dendrogram tree={tree} cards={cards} />
             ) : (
               <Banner mode="info" withIcon>
                 Clustering needs at least one comparable response for every

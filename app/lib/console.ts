@@ -1,6 +1,6 @@
 import { csv, membershipRows, pairwise } from "./analysis.ts";
-import type { StudyResponse } from "./model.ts";
-import { UNKNOWN_LABEL, fileSlug, toResponses, toStudy, type SortDefinition } from "./session.ts";
+import type { SortResponse } from "./model.ts";
+import { UNKNOWN_LABEL, fileSlug, toResponses, type SortDefinition } from "./session.ts";
 
 // Researcher console helpers. The console runs on the researcher's own computer; nothing here touches secrets.
 export const PRODUCTION_RELAY = "https://mpile.app/relay";
@@ -23,8 +23,8 @@ type CollectedItem =
 export type Collection = {
   definition: SortDefinition;
   items: CollectedItem[];
-  submitted: StudyResponse[];
-  drafts: StudyResponse[];
+  submitted: SortResponse[];
+  drafts: SortResponse[];
   problems: { label: string; reason: string }[];
   collectedAt: string;
 };
@@ -50,14 +50,13 @@ export function summarize(definition: SortDefinition, items: CollectedItem[], co
 }
 
 // The existing membership export, with its first column named for what it now holds.
-function memberships(c: Collection, responses: StudyResponse[]) {
-  const [header, ...rows] = membershipRows(toStudy(c.definition).cards, responses);
+function memberships(c: Collection, responses: SortResponse[]) {
+  const [header, ...rows] = membershipRows(c.definition.cards, responses);
   return csv([["participant_code", ...header!.slice(1)], ...rows]);
 }
 
 export function exportFiles(title: string, c: Collection) {
   const slug = fileSlug(title);
-  const study = toStudy(c.definition);
   return [
     {
       label: "Submitted sorts (CSV)",
@@ -71,7 +70,7 @@ export function exportFiles(title: string, c: Collection) {
       type: "text/csv;charset=utf-8",
       text: csv([
         ["card_a", "card_b", "together", "comparable_responses", "submitted_sorts", "similarity"],
-        ...pairwise(study.cards, c.submitted, study.revision).map((p) => [p.a, p.b, p.together, p.compared, p.exposed, p.similarity]),
+        ...pairwise(c.definition.cards, c.submitted).map((p) => [p.a, p.b, p.together, p.compared, p.exposed, p.similarity]),
       ]),
     },
     {
