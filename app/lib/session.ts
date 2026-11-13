@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   bodySchema,
   cardSchema,
+  draftSchema,
   MAX_CARDS,
   uniqueCards,
   validateBody,
@@ -92,7 +93,16 @@ export function toStudy(definition: SortDefinition): Study {
 
 // Runs the same checks the server used to: piles, assignments and card IDs must be consistent.
 export function checkResponse(definition: SortDefinition, value: unknown): ResponseBody {
-  const parsed = bodySchema.safeParse(value);
+  return check(bodySchema, definition, value);
+}
+
+// The same checks for a saved draft, where a pile may not have its name yet. A submitted sort must pass checkResponse.
+export function checkDraft(definition: SortDefinition, value: unknown): ResponseBody {
+  return check(draftSchema, definition, value);
+}
+
+function check(schema: typeof bodySchema, definition: SortDefinition, value: unknown): ResponseBody {
+  const parsed = schema.safeParse(value);
   if (!parsed.success) throw new Error(firstIssue(parsed.error));
   validateBody(toStudy(definition), "sort", parsed.data);
   return parsed.data;
@@ -110,7 +120,7 @@ export function toResponses(definition: SortDefinition, collected: Collected[]) 
         id: label,
         revision: 1,
         kind: "sort",
-        body: checkResponse(definition, item.body),
+        body: (item.kind === "SUBMITTED" ? checkResponse : checkDraft)(definition, item.body),
         status: item.kind === "SUBMITTED" ? "submitted" : "draft",
         version: 0,
         updatedAt: item.updatedAt,

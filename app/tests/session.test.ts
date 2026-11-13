@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   BASELINE,
   buildDefinition,
+  checkDraft,
   checkResponse,
   fileSlug,
   orderCards,
@@ -48,6 +49,20 @@ test("checkResponse enforces sort-mode rules in the browser", () => {
   assert.throws(() => checkResponse(definition, { ...good, assignments: { c9: "p1" } }), /card or pile/);
   assert.throws(() => checkResponse(definition, { ...good, generated: [{ id: "x", text: "mine" }] }), /provided cards only/);
   assert.throws(() => checkResponse(definition, { piles: [] }), /generated/);
+});
+
+test("a draft keeps a pile that has no name yet; a submitted sort may not have one", () => {
+  const unnamed = { generated: [], piles: [{ id: "p1", name: "", description: "why" }], assignments: { c1: "p1" }, notes: "" };
+  assert.deepEqual(checkDraft(definition, unnamed), unnamed);
+  assert.throws(() => checkResponse(definition, unnamed), /piles\.0\.name/);
+  // Every other rule still applies to a draft.
+  assert.throws(() => checkDraft(definition, { ...unnamed, assignments: { c9: "p1" } }), /card or pile/);
+  const { responses, problems } = toResponses(definition, [
+    { label: "Y01", kind: "DRAFT", body: unnamed, updatedAt: "2026-11-09T15:00:00.000Z" },
+    { label: "Y02", kind: "SUBMITTED", body: unnamed, updatedAt: "2026-11-09T16:00:00.000Z" },
+  ]);
+  assert.deepEqual(responses.map((r) => [r.id, r.status]), [["Y01", "draft"]]);
+  assert.deepEqual(problems.map((p) => p.label), ["Y02"]);
 });
 
 test("collected responses feed the existing exports, labeled by participant code", () => {

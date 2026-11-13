@@ -14,7 +14,7 @@ import { H1 } from "@jetbrains/ring-ui-built/components/heading/heading";
 import LoaderInline from "@jetbrains/ring-ui-built/components/loader-inline/loader-inline";
 import Text from "@jetbrains/ring-ui-built/components/text/text";
 import { Frame } from "../frame";
-import { checkResponse, readDefinition, type SortDefinition } from "@/lib/session";
+import { checkDraft, checkResponse, readDefinition, type SortDefinition } from "@/lib/session";
 import { emptyBody, type ResponseBody } from "@/lib/model";
 import PasscodeForm from "./passcode-form";
 import SortWorkspace from "./sort-workspace";
@@ -36,13 +36,16 @@ const BAD_LINK: Screen = {
   retry: false,
 };
 
-const body = (definition: SortDefinition, value: unknown): ResponseBody | null => {
+const read = (check: typeof checkResponse) => (definition: SortDefinition, value: unknown): ResponseBody | null => {
   try {
-    return value ? checkResponse(definition, value) : null;
+    return value ? check(definition, value) : null;
   } catch {
     return null;
   }
 };
+const body = read(checkResponse);
+// A draft may hold a pile with no name yet; reading it strictly would throw the whole draft away.
+const draft = read(checkDraft);
 
 function screenFor(error: unknown): Screen {
   const code = error instanceof SessionError ? error.code : "";
@@ -67,7 +70,7 @@ function screenForSession(session: ParticipantSession): Screen {
   if (session.status === "SUBMITTING") return { name: "sending", session, definition };
   if (session.isClosed)
     return { name: "unavailable", title: "This activity is closed", message: "The study team has closed this activity. Thank you for your time.", retry: false };
-  return { name: "working", session, definition, body: body(definition, session.draft) ?? emptyBody() };
+  return { name: "working", session, definition, body: draft(definition, session.draft) ?? emptyBody() };
 }
 
 // The page reloads when the fragment changes (below), so the link never needs a subscription.
