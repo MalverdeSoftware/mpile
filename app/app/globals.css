@@ -1,0 +1,257 @@
+/* What only mPile needs. The shared layer is @malverdesoftware/ui's base.css; rules: SPEC-ui in malverdesoftware.
+   The accent is Ring's own blue, which is also its default, so nothing here overrides it. */
+
+/* Workspace */
+.workspace {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+/* Stays on screen while scrolling a long card list: how far along, and whether it saved. */
+.workspace__header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--ring-content-background-color);
+}
+
+/* Keeps whatever takes keyboard focus clear of the pinned header. */
+.workspace :is(button, input, textarea) {
+  scroll-margin-top: 9rem;
+}
+
+.workspace__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+h1.workspace__title {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+
+.workspace__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 1rem;
+  padding: 0 1rem 0.5rem;
+}
+
+.workspace__status {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.75rem;
+}
+
+.workspace__progress {
+  margin-bottom: 0;
+  border-radius: 0;
+  background-color: var(--ring-line-color);
+}
+
+.workspace__views {
+  padding: 0.5rem 1rem;
+}
+
+.workspace__views > * {
+  display: flex;
+}
+
+.workspace__views button {
+  flex: 1;
+}
+
+.workspace__body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem 0;
+}
+
+.workspace__body p {
+  margin: 0;
+}
+
+.new-pile {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.new-pile > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Board */
+.sorting-board {
+  display: grid;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.piles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.unsorted-zone,
+.pile-zone {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--ring-line-color);
+  border-radius: 8px;
+}
+
+.unsorted-zone {
+  background: var(--ring-sidebar-background-color);
+}
+
+.zone-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+h2.zone-title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+
+.card-stack {
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* Compact: a long deck multiplies every card's height. */
+.sort-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--ring-content-background-color);
+  border: 1px solid var(--ring-line-color);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+
+.sort-card[draggable="true"] {
+  cursor: grab;
+}
+
+.sort-card__text {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.sort-card__grip {
+  color: var(--ring-icon-color);
+}
+
+.hint-touch {
+  display: none;
+}
+
+/* A grip promises dragging, which a touchscreen doesn't have. The menu is how cards move there. */
+@media (hover: none) {
+  .sort-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .hint-touch {
+    display: inline;
+  }
+}
+
+input.pile-name {
+  font-weight: 600;
+}
+
+.pile-zone__toggle {
+  justify-self: start;
+}
+
+.pile-zone__remove {
+  justify-self: start;
+}
+
+.drop-hint {
+  padding: 1rem;
+  border: 1px dashed var(--ring-borders-color);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.board-empty {
+  padding: 2rem 1rem;
+  border: 1px dashed var(--ring-borders-color);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.workspace__finish {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.workspace__submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.submitted-icon {
+  color: var(--ring-main-color);
+}
+
+/* On a phone one side shows at a time, and the switch in the header already names and counts it. */
+@media (max-width: 849px) {
+  .sorting-board[data-view="unsorted"] .piles-grid,
+  .sorting-board[data-view="piles"] .unsorted-zone,
+  .unsorted-zone .zone-heading {
+    display: none;
+  }
+}
+
+@media (min-width: 850px) {
+  .sorting-board {
+    grid-template-columns: 340px minmax(0, 1fr);
+  }
+
+  .workspace__views {
+    display: none;
+  }
+
+  .workspace__body {
+    padding-inline: 1.5rem;
+  }
+
+  .workspace__heading,
+  .workspace__meta {
+    padding-inline: 1.5rem;
+  }
+}
+
+.submitted-list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}

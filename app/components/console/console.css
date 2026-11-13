@@ -1,0 +1,259 @@
+/* What only the researcher console needs. Colors and controls come from Ring. */
+.console-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.console-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.console-unsaved__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.console-add {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.console-details summary {
+  cursor: pointer;
+  color: var(--ring-link-color);
+}
+
+.console-details[open] summary {
+  margin-bottom: 0.75rem;
+}
+
+.console-details p + p {
+  margin-top: 0.5rem;
+}
+
+.console-steps,
+.console-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.console-steps {
+  list-style: decimal;
+}
+
+.console-list {
+  list-style: disc;
+}
+
+/* The CSV import sits on the same line as the cards field's label. */
+.field-with-action {
+  position: relative;
+}
+
+.field-with-action__action {
+  position: absolute;
+  top: -0.625rem;
+  right: 0;
+}
+
+#cards {
+  min-height: 12rem;
+}
+
+.mono {
+  font-family: var(--ring-font-family-monospace);
+}
+
+.table-scroll {
+  overflow: auto;
+  max-width: 100%;
+}
+
+.console-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.console-table th,
+.console-table td {
+  padding: 0.5rem 1rem 0.5rem 0;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--ring-line-color);
+}
+
+.console-table th {
+  color: var(--ring-secondary-color);
+  font-weight: 500;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.metric-grid > div {
+  padding: 0.75rem 1rem;
+  background: var(--ring-sidebar-background-color);
+  border-radius: 8px;
+}
+
+.metric-grid span {
+  display: block;
+  color: var(--ring-secondary-color);
+}
+
+.metric-grid strong {
+  display: block;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+
+.metric-grid small {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--ring-secondary-color);
+}
+
+.export-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.export-grid button {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.analysis-section {
+  padding-top: 0.75rem;
+}
+
+.matrix {
+  border-collapse: collapse;
+  font-size: var(--ring-font-size-smaller);
+}
+
+.matrix th,
+.matrix td {
+  padding: 0.375rem;
+  text-align: center;
+  border: 1px solid var(--ring-line-color);
+}
+
+.matrix th {
+  font-weight: 500;
+  white-space: nowrap;
+  background: var(--ring-content-background-color);
+}
+
+.matrix tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 180px;
+  max-width: 230px;
+  white-space: normal;
+  text-align: left;
+}
+
+.matrix td {
+  min-width: 58px;
+}
+
+.matrix td small {
+  display: block;
+  font-size: inherit;
+}
+
+.matrix__self {
+  background: var(--ring-sidebar-background-color);
+}
+
+.map-controls {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.map-controls input[type="range"] {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  accent-color: var(--ring-main-color);
+}
+
+.network-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 1.5rem;
+}
+
+.network-layout svg {
+  width: 100%;
+  max-height: 650px;
+}
+
+.card-legend {
+  max-height: 570px;
+  margin: 0.5rem 0 0;
+  padding-left: 1.75rem;
+  list-style: decimal;
+  overflow: auto;
+}
+
+.card-legend li {
+  padding: 0.25rem 0;
+}
+
+.dendrogram {
+  max-width: none;
+}
+
+.chart-line {
+  stroke: var(--ring-main-color);
+}
+
+.chart-node {
+  fill: var(--ring-main-color);
+  stroke: var(--ring-content-background-color);
+}
+
+.chart-node-label {
+  fill: #fff;
+}
+
+.chart-grid {
+  stroke: var(--ring-line-color);
+}
+
+.chart-axis {
+  fill: var(--ring-secondary-color);
+}
+
+.chart-label {
+  fill: var(--ring-text-color);
+}
+
+@media (max-width: 700px) {
+  .metric-grid,
+  .export-grid,
+  .map-controls,
+  .network-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

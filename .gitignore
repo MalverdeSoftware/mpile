@@ -1,0 +1,18 @@
+.DS_Store
+*.tar.gz
+*.tgz
+node_modules/
+*.tsbuildinfo
+.env*
+.wrangler/
+.sites-runtime/
+
+# Phase 0 local build evidence and editor state
+.phase0/
+.idea/
+
+# Local research-workspace files: kept on disk for the author's tools, not published
+AGENTS.local.md
+.malverde-literature.json
+references/*
+!references/README.md

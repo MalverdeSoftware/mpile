@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "mPile"
+abstract: >-
+  Card sorting for research and community activities. Each participant
+  sorts cards on their own phone or computer; responses are sealed in
+  the browser, and the researcher gets the groupings back as data.
+authors:
+  - family-names: "de la Sierra"
+    given-names: "Valentín Quiroz"
+    affiliation: "Johns Hopkins University"
+    orcid: "https://orcid.org/0000-0002-9035-8094"
+  - family-names: "Ledesma"
+    given-names: "Marissa"
+version: "0.1.0"
+license: Apache-2.0
+repository-code: "https://github.com/MalverdeSoftware/mpile"
+url: "https://mpile.app"
+keywords:
+  - community-based participatory research
+  - CBPR
+  - Indigenous-led software
+  - card sorting
+  - pile sorting
