@@ -12,7 +12,6 @@ import { Content, Header } from "@jetbrains/ring-ui-built/components/island/isla
 import ProgressBar from "@jetbrains/ring-ui-built/components/progress-bar/progress-bar";
 import Text from "@jetbrains/ring-ui-built/components/text/text";
 import { ConfirmDialog, ErrorMessage } from "@malverdesoftware/ui/controls";
-import { useBoardTools } from "@/lib/board-tools";
 import { checkResponse, orderCards, type SortDefinition } from "@/lib/session";
 import type { ResponseBody } from "@/lib/model";
 import SortBoard, { count, type BoardView } from "./sort-board";
@@ -43,9 +42,6 @@ export default function SortWorkspace({ session, definition, initial, seed, onSu
   const { state, saveNow } = useAutosave(session, body, !busy && !closed);
   const editable = !busy && !closed && state !== "closed" && state !== "conflict";
   const cards = useMemo(() => orderCards(definition.cards, definition.randomize, seed), [definition, seed]);
-  const move = (card: string, pile: string | null) =>
-    setBody((b) => ({ ...b, assignments: { ...b.assignments, [card]: pile } }));
-  useBoardTools(definition.cards, body, editable, move);
   const assigned = cards.filter((c) => body.assignments[c.id]).length;
 
   async function submit() {

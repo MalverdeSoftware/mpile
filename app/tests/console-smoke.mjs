@@ -51,7 +51,7 @@ try {
     const savedKeyFile = await download(keyFile);
     const file = parseSessionFile(readFileSync(savedKeyFile, "utf8"));
     assert.deepEqual(file.participants.map((p) => p.label), ["Y01", "Y02"]);
-    await tap("label", "Teams channel files");
+    await tap("label", "saved a second copy");
     await type('input[type="password"]', creationKey);
     await screenshot("console-prepared");
     await tap("button", "Publish the session");

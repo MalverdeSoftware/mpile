@@ -2,22 +2,23 @@
 
 ## Working in 0.1
 
-- Text cards, CSV import, and three configurable workflows
-- Separate links for each participant, with saved drafts and final submissions
+- Text cards, typed in or imported from a CSV, and one activity: each participant sorts the same set of cards on their own
+- A personal link and six-digit passcode for each participant, with saved drafts and one final submission
 - Participant-defined piles, optional explanations, and unsorted cards
-- Contribution review and a fixed shared set of cards, with where each card came from
+- Responses sealed in the participant's browser, which only the researcher's key file can open; the site stores sealed data and deletes it when the session is deleted or expires
+- A researcher console that runs on the researcher's own computer: create a session, follow progress, add or remove participants, collect, close and delete
 - CSV and JSON exports, a co-sorting matrix, a circular connection map, and average-linkage clustering
-- Local development, a standalone Cloudflare deployment setup, and Sites hosting
+- Local development and a standalone Cloudflare deployment setup
 
 ## Next
 
 - Pilot with synthetic data and a small group of community members and researchers
+- Bring back the card-generation and collect-review-sort activities described in [methods](METHODS.md), with contribution review and a record of where each card came from
 - Decide whether participants need to correct or withdraw a submission afterward
-- Add saved review drafts for facilitators, access-key rotation and recovery, and study deletion
+- Add key rotation and recovery
 - Add optional verified invitation tokens and deployment-level abuse controls for large public use
 - Try collaborative live sorting as its own mode, clearly separate from independent responses
 - Try researcher-reviewed category crosswalks and optional multidimensional scaling, with documented stress diagnostics
 - Try a multilingual interface, offline facilitation, images and audio, and more accessibility testing
-- Mint a DOI at the first public release and add it to NOTICE, CITATION.cff and the README (the license, funding acknowledgment and `CITATION.cff` were added 2026-11-12)
 
-None of these are in the current app.
+None of the items under Next are in the current app.

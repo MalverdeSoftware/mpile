@@ -88,8 +88,8 @@ export default function ConsolePage() {
           <ErrorMessage error={error} />
         </section>
         <p className="secondary-text">
-          The key file can open every response in its session. Keep it on this computer and in your study team&apos;s
-          Teams channel files only.
+          The key file can open every response in its session. Keep it on this computer and in one secure place your
+          study has approved for its files, and nowhere else.
         </p>
       </main>
     </Frame>
