@@ -1,6 +1,6 @@
 # Contributing
 
-Open an issue to report a bug, suggest a workflow, flag an accessibility problem, or ask a methods question. Use synthetic examples and include the steps to reproduce. Never include real responses, management keys, response keys, or private participant information.
+Open an issue to report a bug, suggest a workflow, flag an accessibility problem, or ask a methods question. Use synthetic examples and include the steps to reproduce. Never include real responses, management keys, response keys, or private participant information. For a security problem, follow [SECURITY.md](SECURITY.md) instead of opening an issue.
 
 For code changes, make a branch, keep the change focused, and run the tests, typecheck, and build in `app/`. Then open a pull request that says what changed, why, and how you checked it. Database changes need a new Drizzle migration. Please don't rewrite one that has already been applied.
 
