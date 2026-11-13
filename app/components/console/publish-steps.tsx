@@ -17,7 +17,7 @@ import { useUnsavedGuard } from "./use-unsaved-guard";
 // Save the key file (twice), then publish. Publishing is safe to retry: the request is rebuilt from the file.
 export default function PublishSteps({ file, onPublished }: { file: SessionFile; onPublished: () => void }) {
   const [saved, setSaved] = useState(false);
-  const [teamsCopy, setTeamsCopy] = useState(false);
+  const [secondCopy, setSecondCopy] = useState(false);
   const [creationKey, setCreationKey] = useState(() => readKey(CREATION_KEY_STORAGE) ?? "");
   const [remember, setRemember] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -71,9 +71,9 @@ export default function PublishSteps({ file, onPublished }: { file: SessionFile;
             </Button>
           </div>
           <Checkbox
-            checked={teamsCopy}
-            onChange={(e) => setTeamsCopy(e.target.checked)}
-            label="I also saved a copy in our study team's Teams channel files."
+            checked={secondCopy}
+            onChange={(e) => setSecondCopy(e.target.checked)}
+            label="I also saved a second copy in a secure place our study has approved for its files."
           />
         </section>
         <form className="panel stack" onSubmit={publish}>
@@ -94,11 +94,11 @@ export default function PublishSteps({ file, onPublished }: { file: SessionFile;
           />
           <ErrorMessage error={error} />
           <div>
-            <Button primary type="submit" disabled={busy || !saved || !teamsCopy || !creationKey.trim()}>
+            <Button primary type="submit" disabled={busy || !saved || !secondCopy || !creationKey.trim()}>
               {busy ? "Publishing…" : "Publish the session"}
             </Button>
           </div>
-          {(!saved || !teamsCopy) && <p className="secondary-text">Save the key file and its second copy first.</p>}
+          {(!saved || !secondCopy) && <p className="secondary-text">Save the key file and its second copy first.</p>}
         </form>
       </main>
     </Frame>

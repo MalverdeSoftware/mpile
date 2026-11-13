@@ -120,7 +120,7 @@ export default function SessionView({
           <div role="status" className="console-unsaved">
             <Banner mode="warning" withIcon>
               <span className="console-unsaved__body">
-                The participant list changed. Save the updated key file, and replace the copy in Teams.
+                The participant list changed. Save the updated key file, and replace your second copy with it.
                 <Button primary onClick={saveFile}>
                   {withIcon(downloadIcon, "Save key file")}
                 </Button>
