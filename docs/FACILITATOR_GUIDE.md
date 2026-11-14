@@ -66,6 +66,8 @@ Choose **Collect responses**. The console opens the sealed responses on your com
 - **Not submitted: drafts (CSV):** the same layout, for drafts only. Drafts never appear in the submitted file or the analysis.
 - **Archive (JSON):** the activity and everything collected, with codes, kinds and times. It keeps the original text exactly.
 
+**The exports are not sealed.** Each one holds readable responses with participant codes. Store them only where your study has approved keeping participant data, with the same care as the key file, and don't email them or paste them into a chat or AI tool.
+
 If participants could add their own cards, those cards are in the two sorts files, with `participant` in the `card_origin` column (your cards say `shared`). Pairwise similarity and the analysis views compare your cards only.
 
 The CSV files open in spreadsheets, with accents and emoji intact. Cells that start like a formula are escaped. The console also shows the co-sorting matrix, connection map and clustering for the submitted sorts. See [Methods](METHODS.md).
@@ -76,7 +78,7 @@ The CSV files open in spreadsheets, with accents and emoji intact. Cells that st
 2. **Collect again** and save the four exports, so you have the final versions.
 3. **Delete from the relay.** The console asks you to confirm that the exports are saved. Every link stops working and the sealed responses are deleted. Tell your study team plainly: the session is **deleted from the live database when you delete the session; Cloudflare's recovery history keeps the sealed copy for up to 7 more days**. That copy stays sealed; only the key file can open it.
 
-Your key file and exports stay on your computer. The key file still opens in the console afterwards, which then says the session is no longer on the relay. If you never delete the session, it deletes itself at its expiry date.
+Your key file and exports stay on your computer. If you ever can't use this console while the session is still on the relay, the key file and Node 24 are enough to collect the responses as JSON: see [reading data without the app](https://github.com/MalverdeSoftware/malverdesoftware/blob/main/docs/DATA-VISIBILITY.md#reading-data-without-the-app). The key file still opens in the console afterwards, which then says the session is no longer on the relay. If you never delete the session, it deletes itself at its expiry date.
 
 ## Before the first real session
 

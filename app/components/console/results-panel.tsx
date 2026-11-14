@@ -78,7 +78,9 @@ export default function ResultsPanel({
             ))}
           </div>
           <p className="secondary-text">
-            Drafts appear only in the not-submitted file and the archive, never in the submitted sorts or the analysis.
+            These files are readable, not sealed: they hold every response with its participant code. Store them where
+            your study keeps participant data, as carefully as the key file. Drafts appear only in the not-submitted file
+            and the archive, never in the submitted sorts or the analysis.
             {generationOf(collection.definition) &&
               " Cards participants added are in the sorts files, marked “participant” under card_origin; the analysis compares your cards only."}
           </p>
