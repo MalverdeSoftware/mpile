@@ -1,5 +1,7 @@
 # mPile
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24184668.svg)](https://doi.org/10.5281/zenodo.24184668) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE) [![Verify app](https://github.com/MalverdeSoftware/mpile/actions/workflows/ci.yml/badge.svg)](https://github.com/MalverdeSoftware/mpile/actions/workflows/ci.yml)
+
 mPile is a card-sorting tool for research and community activities. Each participant sorts the same set of cards into piles that make sense to them, on their own phone or computer, and the researcher gets the groupings back as data. I made it with an Indigenous-led approach to software in mind: practical tools, open methods, and software that communities and research partners can run themselves.
 
 **Status: early release (0.1).** Open source under the [Apache License 2.0](LICENSE).
