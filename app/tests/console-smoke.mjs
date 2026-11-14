@@ -1,5 +1,5 @@
 // Drives the researcher console in headless Chrome against a local console server (synthetic data only):
-// create, save the key file, publish, reopen the saved file, add and remove a participant, collect, export,
+// create, save and check the key file, publish, reopen the saved file, add and remove a participant, collect, export,
 // close, delete, then reopen the deleted session's file. Participants act through session-client in between.
 //   npm run console   (in another terminal)   then   npm run test:console
 import assert from "node:assert/strict";
@@ -51,6 +51,8 @@ try {
     const savedKeyFile = await download(keyFile);
     const file = parseSessionFile(readFileSync(savedKeyFile, "utf8"));
     assert.deepEqual(file.participants.map((p) => p.label), ["Y01", "Y02"]);
+    await pickFile('input[type="file"]', savedKeyFile);
+    await waitFor(hasText("opens this session"), "saved key file checked");
     await tap("label", "saved a second copy");
     await type('input[type="password"]', creationKey);
     await screenshot("console-prepared");

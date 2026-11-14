@@ -31,7 +31,7 @@
     "@jetbrains/ring-ui-built": "7.0.133",
     "@malverdesoftware/relay": "0.1.1",
     "@malverdesoftware/sealed-envelope": "0.1.2",
-    "@malverdesoftware/session-client": "0.1.4",
+    "@malverdesoftware/session-client": "0.2.0",
     "@malverdesoftware/ui": "0.1.1",
     "next": "16.4.6",
     "react": "19.3.1",
