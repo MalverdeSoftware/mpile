@@ -6,4 +6,4 @@ For code changes, make a branch, keep the change focused, and run the tests, typ
 
 Keep participants' own wording and original contributions intact. If you add an analysis method, document its assumptions, how it handles missing data, and its limits. Don't merge similar labels without saying so.
 
-mPile is licensed under the [Apache License 2.0](LICENSE). Under Section 5 of the license, contributions you submit are licensed under the same terms. If you want to contribute a lot of code, talk with me first.
+mPile is licensed under the [Apache License 2.0](LICENSE). Under Section 5 of the license, contributions you submit are licensed under the same terms. If you plan a large code contribution, please open an issue to discuss it first.

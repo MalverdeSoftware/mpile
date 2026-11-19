@@ -145,7 +145,7 @@ npm run deploy:prepare -- <RELAY_DB UUID>   # writes wrangler.selfhost.json for 
 |---|---|
 | ~~Oct 27~~ | ~~Review and approve this spec~~ (done October 25) |
 | Oct 30 | In the Cloudflare dashboard, turn on Workers and D1 if prompted (the free plan is enough; first use asks you to opt in). Then run `npx wrangler login` in `mPile/app`. It opens a browser, so it is yours to do. |
-| Oct 30 | Approve creating the `mpile-relay` database, setting the creation-key secret, and the first deploy. With your login in place, I can run these. |
+| Oct 30 | Approve creating the `mpile-relay` database, setting the creation-key secret, and the first deploy. A maintainer with Cloudflare access runs these. |
 | Nov 2–3 | Rehearsal with real phones |
 | Nov 4 | Readiness gate |
 
