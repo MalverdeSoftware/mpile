@@ -15,3 +15,6 @@ AGENTS.local.md
 .malverde-literature.json
 references/*
 !references/README.md
+
+# Local session checkpoints (kept in malverdesoftware-internal)
+docs/checkpoints.md
