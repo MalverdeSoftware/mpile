@@ -1,6 +1,6 @@
 # Security policy
 
-mPile seals each participant's responses in their browser, so the hosted site at mpile.app stores only data it cannot read, and deletes it when a session is closed or expires. A flaw that exposes responses, keys or passcodes, or lets someone read or alter another person's session, is a security problem. The sealing and relay come from the shared packages in [MalverdeSoftware/malverdesoftware](https://github.com/MalverdeSoftware/malverdesoftware/security); report problems in those packages there.
+mPile seals each participant's responses in their browser, so the hosted site at mpile.app stores only data it cannot read, and deletes it when a session is closed or expires. A flaw that exposes responses, keys or passcodes, or lets someone read or alter another person's session, is a security problem. The sealing and relay come from the shared packages in [MalverdeSoftware/mbolts](https://github.com/MalverdeSoftware/mbolts/security); report problems in those packages there.
 
 ## Supported versions
 

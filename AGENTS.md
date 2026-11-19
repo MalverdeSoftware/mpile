@@ -4,4 +4,4 @@ Maintainers may keep an untracked `AGENTS.local.md` with local setup notes. Read
 
 ## Screens
 
-Follow the [UI spec](https://github.com/MalverdeSoftware/malverdesoftware/blob/main/docs/specs/SPEC-ui.md) for any screen. A shared style or control belongs in `@malverdesoftware/ui` in that repository, not here, once a second app needs it.
+Follow the [UI spec](https://github.com/MalverdeSoftware/mbolts/blob/main/docs/specs/SPEC-ui.md) for any screen. A shared style or control belongs in `@malverdesoftware/ui` in that repository, not here, once a second app needs it.
