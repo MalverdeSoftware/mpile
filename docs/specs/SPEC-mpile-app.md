@@ -1,8 +1,8 @@
 # Spec: mpile-app
 
-> Moved here from MalverdeSoftware/malverdesoftware on 2026-11-13. Branch names, PR numbers and commits below refer to the private development history.
+> Moved here from MalverdeSoftware/mbolts on 2026-11-13. Branch names, PR numbers and commits below refer to the private development history.
 
-Module id `mpile-app` · October 25, 2026 · **Status: approved by the author on October 25, with the decisions recorded at the end.** Depends on `session-client` and `relay` (merged in #4 and #3), installed as pinned tarballs ([CONSUMING.md](https://github.com/MalverdeSoftware/malverdesoftware/blob/main/docs/CONSUMING.md)). Work happens in the mPile repository on a new branch, `round1/sealed-sessions`, from `phase0/jetbrains-pilot`. The shared packages' boundaries are in their [conventions](https://github.com/MalverdeSoftware/malverdesoftware/blob/main/docs/CONVENTIONS.md#boundaries); mPile keeps its own code style.
+Module id `mpile-app` · October 25, 2026 · **Status: approved by the author on October 25, with the decisions recorded at the end.** Depends on `session-client` and `relay` (merged in #4 and #3), installed as pinned tarballs ([CONSUMING.md](https://github.com/MalverdeSoftware/mbolts/blob/main/docs/CONSUMING.md)). Work happens in the mPile repository on a new branch, `round1/sealed-sessions`, from `phase0/jetbrains-pilot`. The shared packages' boundaries are in their [conventions](https://github.com/MalverdeSoftware/mbolts/blob/main/docs/CONVENTIONS.md#boundaries); mPile keeps its own code style.
 
 ## Objective
 

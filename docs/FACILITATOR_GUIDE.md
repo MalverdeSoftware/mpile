@@ -78,7 +78,7 @@ The CSV files open in spreadsheets, with accents and emoji intact. Cells that st
 2. **Collect again** and save the four exports, so you have the final versions.
 3. **Delete from the relay.** The console asks you to confirm that the exports are saved. Every link stops working and the sealed responses are deleted. Tell your study team plainly: the session is **deleted from the live database when you delete the session; Cloudflare's recovery history keeps the sealed copy for up to 7 more days**. That copy stays sealed; only the key file can open it.
 
-Your key file and exports stay on your computer. If you ever can't use this console while the session is still on the relay, the key file and Node 24 are enough to collect the responses as JSON: see [reading data without the app](https://github.com/MalverdeSoftware/malverdesoftware/blob/main/docs/DATA-VISIBILITY.md#reading-data-without-the-app). The key file still opens in the console afterwards, which then says the session is no longer on the relay. If you never delete the session, it deletes itself at its expiry date.
+Your key file and exports stay on your computer. If you ever can't use this console while the session is still on the relay, the key file and Node 24 are enough to collect the responses as JSON: see [reading data without the app](https://github.com/MalverdeSoftware/mbolts/blob/main/docs/DATA-VISIBILITY.md#reading-data-without-the-app). The key file still opens in the console afterwards, which then says the session is no longer on the relay. If you never delete the session, it deletes itself at its expiry date.
 
 ## Before the first real session
 
