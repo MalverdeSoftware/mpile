@@ -1,6 +1,6 @@
-# mPile working instructions
+# Notes for coding agents
 
-If `AGENTS.local.md` exists in this folder, read it first. It holds instructions for the author's local workspace and is not published.
+Maintainers may keep an untracked `AGENTS.local.md` with local setup notes. Read it first if present.
 
 ## Screens
 

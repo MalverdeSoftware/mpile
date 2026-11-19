@@ -1,6 +1,6 @@
 # Developing mPile
 
-You need Node 24. The `.node-version` file records the version I tested, 24.19.0.
+You need Node 24. The `.node-version` file records the tested version, 24.19.0.
 
 ## Check that your changes work
 
